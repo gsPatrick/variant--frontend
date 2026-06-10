@@ -1,0 +1,86 @@
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.55rem;
+  border-radius: var(--radius-pill);
+  background: rgba(8, 9, 8, 0.85);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-float);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+}
+
+/* Acoplada à pílula: sem fundo/sombra próprios, vira uma faixa interna. */
+.attached {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0.1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-2);
+  padding: 0 0.5rem;
+  white-space: nowrap;
+}
+.divider {
+  width: 1px;
+  height: 1.4rem;
+  background: var(--glass-border);
+}
+
+.tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: color 0.2s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.tool:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.07);
+}
+.active {
+  color: #07140c;
+  background: var(--grad-variant);
+  border-color: transparent;
+}
+.save {
+  color: var(--green);
+}
+.save:hover {
+  background: var(--green-soft);
+  color: #fff;
+}
+.cancelBtn {
+  color: #fb7185;
+}
+.cancelBtn:hover {
+  background: rgba(251, 113, 133, 0.14);
+  color: #fff;
+}
+
+.area {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0 0.6rem;
+  font-size: 0.85rem;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+.area b {
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}

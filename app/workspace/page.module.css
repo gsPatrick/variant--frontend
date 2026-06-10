@@ -1,0 +1,333 @@
+.workspace {
+  position: relative;
+  display: grid;
+  grid-template-columns: 264px 1fr;
+  gap: 1.5rem;
+  height: 100vh;
+  padding: 1.5rem;
+  background:
+    radial-gradient(820px 460px at 82% -14%, rgba(34, 197, 94, 0.08), transparent 60%),
+    radial-gradient(720px 520px at -8% 112%, rgba(249, 115, 22, 0.07), transparent 60%),
+    radial-gradient(900px 700px at 50% 50%, rgba(255, 255, 255, 0.015), transparent 70%);
+  transition: grid-template-columns 0.4s var(--ease);
+}
+.collapsed {
+  grid-template-columns: 78px 1fr;
+}
+
+/* SAFRAS ocupa 100% da tela (menos a sidebar) */
+.safrasMode {
+  padding: 0;
+  gap: 0;
+  background: var(--bg-deep);
+}
+.safrasMode .sidebarSlot {
+  padding: 1rem;
+}
+
+/* Sidebar recolhida no SAFRAS: flutua solta e o mapa toma a tela inteira */
+.floating {
+  grid-template-columns: 1fr;
+}
+.floating .sidebarSlot {
+  position: absolute;
+  left: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 50vh;
+  width: 78px;
+  z-index: 650;
+  padding: 0;
+}
+
+.sidebarSlot {
+  height: 100%;
+  min-height: 0;
+}
+
+.content {
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.contentHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.breadcrumb {
+  font-size: 0.85rem;
+  color: var(--text-3);
+}
+.sep {
+  margin: 0 0.3rem;
+  color: rgba(255, 255, 255, 0.2);
+}
+.pageTitle {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 0.2rem;
+}
+
+.solos {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+.resistCard {
+  flex-shrink: 0;
+  padding: 1.1rem 1.25rem;
+}
+
+/* Filtro único */
+.filterBar {
+  position: relative;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding: 0.9rem 1.3rem;
+}
+.filterIntro {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.filterDot {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--grad-variant);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.6);
+}
+.filterTitle {
+  font-weight: 650;
+}
+.filterHint {
+  font-size: 0.8rem;
+  color: var(--text-3);
+}
+.filterControls {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.filterField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 190px;
+}
+.filterLabel {
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-2);
+}
+
+/* KPIs */
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+.kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 1.15rem;
+}
+.kpiLabel {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-3);
+}
+.kpiValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.kpiUnit {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-3);
+}
+.kpiSub {
+  font-size: 0.78rem;
+  color: var(--text-3);
+}
+.deltaUp {
+  color: var(--green);
+}
+.deltaDown {
+  color: #fb923c;
+}
+
+.cards {
+  flex: 1;
+  min-height: 22rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  grid-template-rows: 1fr;
+  gap: 1.25rem;
+  align-items: stretch;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-height: 0;
+}
+.cardWide {
+  min-width: 0;
+}
+
+.cardHead {
+  margin-bottom: 0.25rem;
+}
+.cardKicker {
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.cardTitle {
+  font-size: 1.3rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  margin-top: 0.15rem;
+}
+.cardFoot {
+  font-size: 0.8rem;
+  color: var(--text-3);
+  padding-top: 0.25rem;
+}
+
+/* SAFRAS — mapa em tela cheia + timeline sobreposta + modal */
+.safras {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+.mapLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--text-3);
+  background: var(--bg-elev);
+}
+.safrasEmpty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.timelineSlot {
+  position: absolute;
+  left: 1.25rem;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Alça para ocultar/mostrar a timeline */
+.timelineHandle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.9rem;
+  margin-bottom: 0.5rem;
+  border-radius: var(--radius-pill);
+  background: rgba(8, 9, 8, 0.72);
+  border: 1px solid var(--glass-border);
+  color: var(--text-2);
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  transition: color 0.25s var(--ease), background 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.timelineHandle:hover {
+  color: #fff;
+  background: rgba(22, 22, 22, 0.82);
+  transform: translateY(-1px);
+}
+.handleGrip {
+  width: 26px;
+  height: 4px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.5;
+}
+.handleChevron {
+  transition: transform 0.35s var(--ease);
+}
+
+.timelinePanel {
+  width: 100%;
+  transform-origin: bottom center;
+  transition: transform 0.4s var(--ease), opacity 0.4s var(--ease), max-height 0.4s var(--ease);
+  max-height: 220px;
+}
+
+.timelineClosed .handleChevron {
+  transform: rotate(180deg);
+}
+.timelineClosed .timelinePanel {
+  transform: translateY(130%);
+  opacity: 0;
+  max-height: 0;
+  pointer-events: none;
+}
+
+/* Responsivo */
+@media (max-width: 1040px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+  .kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .kpis {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .workspace {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 100vh;
+  }
+  .sidebarSlot {
+    height: auto;
+  }
+  .content {
+    overflow: visible;
+  }
+}

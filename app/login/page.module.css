@@ -1,0 +1,187 @@
+.page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+/* ---------- Brand (esquerda) — vídeo cinematográfico ---------- */
+.brand {
+  position: relative;
+  overflow: hidden;
+  border-right: 1px solid var(--glass-border);
+  background: #000;
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.brandOverlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(3, 3, 3, 0.55) 0%, rgba(3, 3, 3, 0.12) 38%, rgba(3, 3, 3, 0.82) 100%),
+    linear-gradient(90deg, rgba(3, 3, 3, 0.5), rgba(3, 3, 3, 0.05) 55%);
+  pointer-events: none;
+}
+
+.brandContent {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(2rem, 4vw, 3.5rem);
+}
+
+/* Logo grande, colada no canto superior esquerdo.
+   O arquivo e mantido inteiro; aqui exibimos so o simbolo via recorte CSS
+   (imagem superdimensionada dentro de uma caixa com overflow hidden). */
+.brandLogo {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.75rem;
+  z-index: 2;
+  width: 170px;
+  height: 108px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.brandLogo img {
+  position: absolute;
+  top: -53px;
+  left: -38px;
+  width: 245px;
+  height: auto;
+  max-width: none;
+  display: block;
+}
+
+.brandPhrase {
+  max-width: 16ch;
+  font-size: clamp(1.7rem, 2.8vw, 2.6rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.14;
+  color: #fff;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55);
+}
+
+/* ---------- Form (direita) ---------- */
+.formSide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(2rem, 4vw, 4rem);
+  background: var(--bg-deep);
+}
+.formWrap {
+  width: 100%;
+  max-width: 380px;
+}
+
+.formHeader {
+  margin-bottom: 2rem;
+}
+.logoMobile {
+  display: none;
+  margin-bottom: 1.5rem;
+}
+.formTitle {
+  font-size: clamp(1.7rem, 4vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.formSubtitle {
+  margin-top: 0.5rem;
+  color: var(--text-2);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.labelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-2);
+}
+.forgot {
+  font-size: 0.82rem;
+  color: var(--text-3);
+  transition: color 0.25s var(--ease);
+}
+.forgot:hover {
+  color: var(--green);
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  background: transparent;
+  border: none;
+  color: var(--text-3);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: color 0.25s var(--ease), background 0.25s var(--ease);
+}
+.toggle:hover {
+  color: var(--text-1);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.error {
+  font-size: 0.85rem;
+  color: #fb7185;
+  background: rgba(251, 113, 133, 0.1);
+  border: 1px solid rgba(251, 113, 133, 0.25);
+  padding: 0.65rem 0.8rem;
+  border-radius: var(--radius-sm);
+}
+
+.submit {
+  width: 100%;
+  justify-content: center;
+  margin-top: 0.3rem;
+}
+
+.formFooter {
+  margin-top: 2rem;
+  font-size: 0.82rem;
+  color: var(--text-3);
+  text-align: center;
+}
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 880px) {
+  .page {
+    grid-template-columns: 1fr;
+  }
+  .brand {
+    display: none;
+  }
+  .logoMobile {
+    display: inline-flex;
+  }
+  .formSide {
+    min-height: 100vh;
+  }
+}

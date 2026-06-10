@@ -1,0 +1,76 @@
+.dot {
+  --accent: var(--text-2);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.core {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  color: var(--accent);
+  background: rgba(10, 10, 10, 0.6);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease),
+    background 0.35s var(--ease);
+}
+
+.dot:hover .core {
+  transform: scale(1.08);
+}
+
+.plantio {
+  --accent: var(--green);
+}
+.adubacao {
+  --accent: var(--gold);
+}
+.defensivo {
+  --accent: #38bdf8;
+}
+.colheita {
+  --accent: var(--orange);
+}
+
+.active .core {
+  color: #fff;
+  background: color-mix(in srgb, var(--accent) 85%, transparent);
+  border-color: var(--accent);
+  box-shadow: 0 0 18px -2px var(--accent);
+}
+
+.ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  opacity: 0.7;
+  animation: pulse 2s var(--ease) infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}

@@ -1,0 +1,183 @@
+.wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+/* Barra de ferramentas de desenho (topo, centralizada) */
+.toolbar {
+  position: absolute;
+  top: 1.1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.55rem;
+  border-radius: var(--radius-pill);
+  background: rgba(8, 9, 8, 0.78);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-float);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+  animation: drop 0.3s var(--ease);
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* Quando a pílula do header está presente (sidebar recolhida), a barra de
+   desenho desce para ficar logo abaixo dela. */
+.toolbarLow {
+  top: 5.5rem;
+}
+.areaLabelLow {
+  top: 9rem;
+}
+
+.toolName {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-2);
+  padding: 0 0.5rem;
+  white-space: nowrap;
+}
+.divider {
+  width: 1px;
+  height: 1.4rem;
+  background: var(--glass-border);
+}
+
+.tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: color 0.2s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.tool:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.07);
+}
+.toolActive {
+  color: #07140c;
+  background: var(--grad-variant);
+  border-color: transparent;
+}
+.save {
+  color: var(--green);
+}
+.save:hover {
+  background: var(--green-soft);
+  color: #fff;
+}
+.cancel {
+  color: #fb7185;
+}
+.cancel:hover {
+  background: rgba(251, 113, 133, 0.14);
+  color: #fff;
+}
+
+/* Etiqueta de área em tempo real */
+.areaLabel {
+  position: absolute;
+  top: 4.6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-pill);
+  background: rgba(8, 9, 8, 0.8);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  color: var(--text-2);
+  font-size: 0.9rem;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+.areaValue {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+.hint {
+  position: absolute;
+  bottom: 1.1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--radius-pill);
+  background: rgba(8, 9, 8, 0.7);
+  border: 1px solid var(--glass-border);
+  color: var(--text-3);
+  font-size: 0.82rem;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.noGeo {
+  position: absolute;
+  top: 1.1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  max-width: 420px;
+  text-align: center;
+  padding: 0.9rem 1.3rem;
+  border-radius: var(--radius);
+  background: rgba(8, 9, 8, 0.8);
+  border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+.noGeoTitle {
+  font-weight: 650;
+  color: var(--text-1);
+}
+.noGeoText {
+  font-size: 0.84rem;
+  color: var(--text-3);
+  margin-top: 0.2rem;
+}
+
+/* Tooltip do talhão (hover no mapa) */
+.tipTitle {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+}
+.tipLine {
+  display: block;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.82);
+}
+.tipHint {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+}

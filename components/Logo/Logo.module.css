@@ -1,0 +1,61 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.img {
+  height: 100%;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.xs {
+  height: 32px;
+}
+.sm {
+  height: 40px;
+}
+.md {
+  height: 64px;
+}
+.lg {
+  height: 120px;
+}
+.xl {
+  height: 200px;
+}
+
+/* Variante "mark": mostra só o símbolo (recorte CSS do PNG, sem o texto).
+   Percentuais derivados da caixa do símbolo no arquivo original. */
+.mark {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 10px;
+}
+.mark .img {
+  position: absolute;
+  width: 308.3%;
+  height: auto;
+  max-width: none;
+  top: -61.4%;
+  left: -104.6%;
+}
+
+/* Variante "lockup": símbolo + o texto da própria logo, recortado sem margem. */
+.lockup {
+  position: relative;
+  aspect-ratio: 1.577 / 1;
+  overflow: hidden;
+}
+.lockup .img {
+  position: absolute;
+  width: 144.13%;
+  height: auto;
+  max-width: none;
+  top: -49.41%;
+  left: -22.07%;
+}

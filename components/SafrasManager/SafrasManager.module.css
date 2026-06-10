@@ -1,0 +1,452 @@
+.panel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: 0;
+}
+.head .kicker {
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+.title {
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 0.2rem;
+}
+
+.layout {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 1.25rem;
+}
+
+/* Formulário */
+.formCard {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.4rem;
+  height: fit-content;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+}
+.formTitle {
+  font-size: 1.1rem;
+  font-weight: 650;
+  margin-bottom: 0.2rem;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-2);
+}
+.submit {
+  width: 100%;
+  justify-content: center;
+  margin-top: 0.4rem;
+}
+
+/* Lista */
+.listCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 0;
+}
+.searchRow {
+  flex-shrink: 0;
+}
+.seasons {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-right: 0.25rem;
+}
+
+.seasonCard {
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  overflow: hidden;
+}
+.seasonHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.02);
+}
+.seasonPlot {
+  font-weight: 650;
+  color: var(--text-1);
+}
+.seasonYear {
+  margin-left: 0.6rem;
+  font-size: 0.85rem;
+  color: var(--text-3);
+}
+.seasonMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.variety {
+  font-size: 0.85rem;
+  color: var(--text-2);
+}
+
+.noEvents {
+  padding: 1.2rem;
+  color: var(--text-3);
+  font-size: 0.88rem;
+}
+
+.events {
+  display: flex;
+  flex-direction: column;
+}
+.event {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+.eventTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.eventDate {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--green);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+.eventDesc {
+  font-size: 0.88rem;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+.formHint {
+  font-size: 0.88rem;
+  color: var(--text-3);
+  line-height: 1.5;
+}
+
+.addForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.9rem 1.2rem 1.1rem;
+}
+.addRow {
+  display: flex;
+  gap: 0.6rem;
+}
+.addRow > :first-child {
+  flex: 1;
+}
+.fileRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-sm);
+  border: 1px dashed var(--glass-border-strong);
+  color: var(--text-3);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.fileRow:hover {
+  color: var(--green);
+  border-color: rgba(34, 197, 94, 0.4);
+}
+.fileInput {
+  display: none;
+}
+.addActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+.eventTitle {
+  font-weight: 600;
+}
+.titleInput {
+  flex: 1;
+  min-width: 0;
+  padding: 0.4rem 0.6rem;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-1);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: border-color 0.25s var(--ease), background 0.25s var(--ease);
+}
+.titleInput:hover {
+  border-color: var(--glass-border);
+}
+.titleInput:focus {
+  outline: none;
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(34, 197, 94, 0.5);
+}
+.date {
+  padding: 0.4rem 0.6rem;
+  border-radius: 9px;
+  border: 1px solid var(--glass-border);
+  background: rgba(0, 0, 0, 0.4);
+  color: var(--text-1);
+  font-family: inherit;
+  font-size: 0.85rem;
+  color-scheme: dark;
+}
+.desc {
+  width: 100%;
+  resize: vertical;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
+  background: rgba(0, 0, 0, 0.4);
+  color: var(--text-1);
+  font-family: inherit;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+.desc:focus {
+  outline: none;
+  border-color: rgba(34, 197, 94, 0.5);
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12);
+}
+
+.eventFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.photos {
+  display: flex;
+  gap: 0.5rem;
+}
+.photo {
+  position: relative;
+  width: 64px;
+  height: 44px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  padding: 0;
+  cursor: pointer;
+  background: var(--bg-elev);
+}
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.photoOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  transition: opacity 0.2s var(--ease);
+}
+.photo:hover .photoOverlay {
+  opacity: 1;
+}
+.addPhoto {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: 1px dashed var(--glass-border-strong);
+  background: transparent;
+  color: var(--text-3);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease), background 0.2s var(--ease);
+}
+.addPhoto:hover {
+  color: var(--green);
+  border-color: rgba(34, 197, 94, 0.4);
+  background: var(--green-soft);
+}
+
+.addEvent {
+  align-self: flex-start;
+  margin: 0.5rem 1.2rem 1rem;
+  padding: 0.55rem 1rem;
+  border-radius: 9px;
+  border: 1px dashed var(--glass-border-strong);
+  background: transparent;
+  color: var(--text-2);
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease), background 0.2s var(--ease);
+}
+.addEvent:hover {
+  color: var(--green);
+  border-color: rgba(34, 197, 94, 0.4);
+  background: var(--green-soft);
+}
+
+.saveEvent {
+  padding: 0.5rem 1rem;
+  border-radius: 9px;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  background: var(--green-soft);
+  color: var(--green);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.25s var(--ease), color 0.25s var(--ease);
+}
+.saveEvent:hover {
+  background: rgba(34, 197, 94, 0.2);
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ----- Editar/excluir safra e evento ----- */
+.rowActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: 0.2rem;
+}
+.eventActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-3);
+  cursor: pointer;
+  transition: color 0.2s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.iconBtn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--glass-border-strong);
+}
+.danger:hover {
+  color: #fda4af;
+  background: rgba(251, 113, 133, 0.12);
+  border-color: rgba(251, 113, 133, 0.4);
+}
+
+.confirmBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin: 0.6rem 1.2rem;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.85rem;
+  color: var(--text-2);
+  background: rgba(251, 113, 133, 0.08);
+  border: 1px solid rgba(251, 113, 133, 0.25);
+  border-radius: 10px;
+}
+.confirmActions {
+  display: inline-flex;
+  gap: 0.5rem;
+}
+.confirmCancel,
+.confirmDanger {
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.confirmCancel {
+  border: 1px solid var(--glass-border);
+  background: transparent;
+  color: var(--text-2);
+}
+.confirmCancel:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+.confirmDanger {
+  border: none;
+  background: #ef4444;
+  color: #fff;
+}
+.confirmDanger:hover {
+  filter: brightness(1.08);
+}
+
+.seasonEdit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%;
+}
+.seasonEditRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+.editActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}

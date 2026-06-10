@@ -1,0 +1,180 @@
+.shell {
+  position: relative;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 1.25rem;
+  height: 100vh;
+  padding: 1.25rem;
+  background:
+    radial-gradient(820px 460px at 82% -14%, rgba(34, 197, 94, 0.07), transparent 60%),
+    radial-gradient(720px 520px at -8% 112%, rgba(249, 115, 22, 0.06), transparent 60%);
+  transition: grid-template-columns 0.35s var(--ease);
+}
+.navCollapsed {
+  grid-template-columns: 76px 1fr;
+}
+
+.sidebarSlot {
+  height: 100%;
+  min-height: 0;
+}
+
+.main {
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.mapArea {
+  position: relative;
+  min-width: 0;
+  height: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+}
+.mapLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--text-3);
+  background: var(--bg-elev);
+}
+
+.soilDock {
+  position: absolute;
+  left: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.7rem;
+}
+.rButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  background: rgba(8, 9, 8, 0.78);
+  color: var(--text-1);
+  font-weight: 800;
+  font-size: 1.05rem;
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-float);
+  transition: color 0.25s var(--ease), background 0.25s var(--ease), border-color 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.rButton:hover {
+  transform: translateY(-2px);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: var(--green);
+}
+.rButtonActive {
+  background: var(--grad-variant);
+  color: #07140c;
+  border-color: transparent;
+}
+
+/* Barra de desenho flutuante (sidebar aberta) */
+.drawToolbarTop {
+  position: absolute;
+  top: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 600;
+  max-width: calc(100% - 2rem);
+}
+
+/* ---------- Timeline sobre o mapa (igual ao produtor) ---------- */
+.timelineSlot {
+  position: absolute;
+  left: 1.25rem;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.timelineHandle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.9rem;
+  margin-bottom: 0.5rem;
+  border-radius: var(--radius-pill);
+  background: rgba(8, 9, 8, 0.72);
+  border: 1px solid var(--glass-border);
+  color: var(--text-2);
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  transition: color 0.25s var(--ease), background 0.25s var(--ease);
+}
+.timelineHandle:hover {
+  color: #fff;
+  background: rgba(22, 22, 22, 0.82);
+}
+.handleGrip {
+  width: 26px;
+  height: 4px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.5;
+}
+.handleChevron {
+  transition: transform 0.35s var(--ease);
+}
+.timelinePanel {
+  width: 100%;
+  transform-origin: bottom center;
+  transition: transform 0.4s var(--ease), opacity 0.4s var(--ease), max-height 0.4s var(--ease);
+  max-height: 220px;
+}
+.timelineClosed .handleChevron {
+  transform: rotate(180deg);
+}
+.timelineClosed .timelinePanel {
+  transform: translateY(130%);
+  opacity: 0;
+  max-height: 0;
+  pointer-events: none;
+}
+
+/* ---------- Abas: painéis (tabelas/forms) ---------- */
+.panelWrap {
+  height: 100%;
+  animation: fadeIn 0.3s var(--ease);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 860px) {
+  .shell {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 100vh;
+  }
+  .sidebarSlot {
+    height: auto;
+  }
+  .main {
+    height: 70vh;
+  }
+}

@@ -1,0 +1,34 @@
+.wrap {
+  width: 100%;
+  flex: 1;
+  min-height: 240px;
+}
+
+.tip {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.6rem 0.8rem;
+  background: rgba(12, 14, 12, 0.9);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  box-shadow: 0 16px 40px -16px rgba(0, 0, 0, 0.9);
+}
+.tipName {
+  font-size: 0.72rem;
+  color: var(--text-3);
+}
+.tipValue {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-1);
+  font-variant-numeric: tabular-nums;
+}
+.tipLevel {
+  font-style: normal;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--green);
+}

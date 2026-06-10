@@ -1,0 +1,174 @@
+:root {
+  /* Fundo e elevações */
+  --bg-deep: #030303;
+  --bg-elev: #0a0a0a;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(10, 10, 10, 0.45);
+  --glass-bg-soft: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-strong: rgba(255, 255, 255, 0.16);
+
+  /* Destaques Variant */
+  --green: #22c55e;
+  --green-soft: rgba(34, 197, 94, 0.12);
+  --gold: #eab308;
+  --gold-soft: rgba(234, 179, 8, 0.12);
+  --orange: #f97316;
+  --orange-soft: rgba(249, 115, 22, 0.12);
+  --grad-variant: linear-gradient(135deg, #22c55e 0%, #eab308 48%, #f97316 100%);
+  --grad-variant-soft: linear-gradient(135deg, rgba(34, 197, 94, 0.16), rgba(249, 115, 22, 0.16));
+
+  /* Texto */
+  --text-1: #f5f5f7;
+  --text-2: rgba(245, 245, 247, 0.62);
+  --text-3: rgba(245, 245, 247, 0.38);
+
+  /* Forma e movimento */
+  --radius-sm: 10px;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --shadow-float: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 24px 70px -28px rgba(0, 0, 0, 0.9);
+  --shadow-glow-green: 0 8px 30px -8px rgba(34, 197, 94, 0.45);
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI",
+    Roboto, Helvetica, Arial, system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text-1);
+  background-color: var(--bg-deep);
+  background-image:
+    radial-gradient(900px 500px at 12% -8%, rgba(34, 197, 94, 0.12), transparent 60%),
+    radial-gradient(900px 600px at 95% 8%, rgba(249, 115, 22, 0.1), transparent 55%),
+    radial-gradient(700px 700px at 50% 120%, rgba(234, 179, 8, 0.06), transparent 60%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.5;
+}
+
+::selection {
+  background: rgba(34, 197, 94, 0.3);
+  color: #fff;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border: 3px solid transparent;
+  background-clip: content-box;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+  background-clip: content-box;
+}
+
+/* ---------- Tema escuro do Leaflet (integração de mapa) ---------- */
+.leaflet-container {
+  background: #0a0a0a;
+  font-family: var(--font-sans);
+}
+.leaflet-control-zoom {
+  border: none !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+}
+.leaflet-control-zoom a {
+  background: rgba(10, 10, 10, 0.7);
+  color: #fff;
+  border-color: var(--glass-border);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.leaflet-control-zoom a:hover {
+  background: rgba(34, 197, 94, 0.25);
+  color: #fff;
+}
+.leaflet-control-attribution {
+  background: rgba(0, 0, 0, 0.55) !important;
+  color: var(--text-3) !important;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.leaflet-control-attribution a {
+  color: var(--text-2) !important;
+}
+
+/* Marcador customizado (pin de cultura) */
+.variant-pin {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--pin, #22c55e);
+  border: 3px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--pin, #22c55e) 22%, transparent),
+    0 4px 12px rgba(0, 0, 0, 0.55);
+}
+
+/* Tooltip permanente (rótulo da variedade) */
+.leaflet-tooltip.variant-tip {
+  background: rgba(12, 14, 12, 0.92);
+  border: 1px solid var(--glass-border);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.78rem;
+  border-radius: 8px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.leaflet-tooltip-top.variant-tip::before {
+  border-top-color: rgba(12, 14, 12, 0.92);
+}
+
+/* Popup escuro */
+.leaflet-popup.variant-popup .leaflet-popup-content-wrapper {
+  background: rgba(12, 14, 12, 0.94);
+  color: #fff;
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+.leaflet-popup.variant-popup .leaflet-popup-tip {
+  background: rgba(12, 14, 12, 0.94);
+}
+.leaflet-popup.variant-popup .leaflet-popup-content {
+  margin: 0.75rem 1rem;
+  font-size: 0.9rem;
+}
+.leaflet-popup.variant-popup a.leaflet-popup-close-button {
+  color: var(--text-2);
+}

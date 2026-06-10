@@ -1,0 +1,68 @@
+.pill {
+  position: fixed;
+  left: var(--x);
+  top: var(--y);
+  transform: scale(var(--s));
+  transform-origin: top left;
+  z-index: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: var(--radius-pill);
+  background: rgba(10, 10, 10, 0.4);
+  border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  backdrop-filter: blur(20px) saturate(150%);
+  box-shadow: var(--shadow-float);
+  cursor: grab;
+}
+.pill:active {
+  cursor: grabbing;
+}
+
+.field {
+  min-width: 134px;
+  cursor: default;
+}
+
+.resize {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  z-index: 2;
+  touch-action: none;
+  transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+}
+.pill:hover .resize {
+  opacity: 0.55;
+}
+.resize:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+.tl {
+  top: -5px;
+  left: -5px;
+  cursor: nwse-resize;
+}
+.tr {
+  top: -5px;
+  right: -5px;
+  cursor: nesw-resize;
+}
+.bl {
+  bottom: -5px;
+  left: -5px;
+  cursor: nesw-resize;
+}
+.br {
+  bottom: -5px;
+  right: -5px;
+  cursor: nwse-resize;
+}

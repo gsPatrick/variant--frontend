@@ -1,0 +1,43 @@
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.6rem;
+  padding: 2.5rem 1.5rem;
+  min-height: 200px;
+}
+.compact {
+  min-height: 0;
+  padding: 1.5rem 1rem;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.4rem;
+  height: 3.4rem;
+  margin-bottom: 0.3rem;
+  border-radius: 16px;
+  color: var(--green);
+  background: var(--green-soft);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 650;
+  color: var(--text-1);
+  letter-spacing: -0.01em;
+}
+.desc {
+  max-width: 42ch;
+  color: var(--text-3);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.action {
+  margin-top: 0.6rem;
+}
