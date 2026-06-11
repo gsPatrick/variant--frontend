@@ -293,6 +293,12 @@ export default function AdminWorkspacePage() {
       setToast(err.message);
     }
   }
+  // Abre a edição com o dono completo (fazendas → talhões) para o modal exibir.
+  function openEditUser(row) {
+    const owner = tree.find((o) => o.id === row.id);
+    setEditUser(owner ? { ...owner, doc: owner.document || '' } : row);
+  }
+
   async function saveUser(updated, { passwordReset }) {
     try {
       const body = { name: updated.name, email: updated.email, document: updated.doc };
@@ -452,7 +458,7 @@ export default function AdminWorkspacePage() {
               users={usersForTable}
               loading={loading}
               onToggle={toggleUser}
-              onEdit={setEditUser}
+              onEdit={openEditUser}
               onDelete={setConfirmUser}
               onNewOnboarding={newOnboarding}
               onAdd={() => setModalOpen(true)}

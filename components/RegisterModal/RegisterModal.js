@@ -5,6 +5,7 @@ import styles from './RegisterModal.module.css';
 import Input from '../Input/Input';
 import Button from '../Button/Button';
 import Select from '../Select/Select';
+import PasswordStrength from '../PasswordStrength/PasswordStrength';
 import { UF_OPTIONS, fetchCities, geocodeCity } from '@/lib/geo';
 
 const Close = (
@@ -87,11 +88,18 @@ export default function RegisterModal({ onClose, onCreate, initialOwner = '' }) 
 
   async function handleCreate() {
     setError('');
+    // Validações claras antes de chamar a API.
+    if (!owner.trim()) return setError('Informe o nome do proprietário.');
+    if (!email.trim()) return setError('Informe o e-mail de acesso.');
+    if (password.length < 6) return setError('A senha precisa ter no mínimo 6 caracteres.');
+
     setSubmitting(true);
     try {
       await onCreate({ owner, email, password, farms });
     } catch (err) {
-      setError(err.message || 'Não foi possível cadastrar.');
+      // Mostra o detalhe específico da API (ex.: senha curta) quando houver.
+      const detail = Array.isArray(err.details) && err.details[0]?.message;
+      setError(detail || err.message || 'Não foi possível cadastrar.');
     } finally {
       setSubmitting(false);
     }
@@ -122,6 +130,7 @@ export default function RegisterModal({ onClose, onCreate, initialOwner = '' }) 
           <div className={styles.field}>
             <label className={styles.label}>Senha de acesso</label>
             <Input type="password" placeholder="mínimo 6 caracteres" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <PasswordStrength value={password} />
           </div>
 
           {farms.map((farm, fi) => (
