@@ -10,6 +10,7 @@ import AdminFloating from '@/components/AdminFloating/AdminFloating';
 import DrawToolbar from '@/components/DrawToolbar/DrawToolbar';
 import ImportModal from '@/components/ImportModal/ImportModal';
 import KmlImportModal from '@/components/KmlImportModal/KmlImportModal';
+import ProfileModal from '@/components/ProfileModal/ProfileModal';
 import RegisterModal from '@/components/RegisterModal/RegisterModal';
 import QuickAddModal from '@/components/QuickAddModal/QuickAddModal';
 import SoilResistanceTable from '@/components/SoilResistanceTable/SoilResistanceTable';
@@ -71,6 +72,7 @@ export default function AdminWorkspacePage() {
 
   const [importing, setImporting] = useState(false);
   const [kmlImporting, setKmlImporting] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [prefillOwner, setPrefillOwner] = useState('');
   const [quickAdd, setQuickAdd] = useState(null);
@@ -379,7 +381,7 @@ export default function AdminWorkspacePage() {
   return (
     <main className={cx(styles.shell, navCollapsed && styles.navCollapsed)}>
       <div className={styles.sidebarSlot}>
-        <AdminNav active={tab} onChange={setTab} collapsed={navCollapsed} onToggle={() => setNavCollapsed((p) => !p)}>
+        <AdminNav active={tab} onChange={setTab} collapsed={navCollapsed} onToggle={() => setNavCollapsed((p) => !p)} onProfile={() => setProfileOpen(true)}>
           {tab === 'map' && (
             <AdminSidebar
               owners={tree}
@@ -582,6 +584,8 @@ export default function AdminWorkspacePage() {
           onCancel={() => setConfirmDelete(null)}
         />
       )}
+
+      {profileOpen && <ProfileModal onClose={() => setProfileOpen(false)} onToast={setToast} />}
 
       <Toast message={toast} onDone={() => setToast('')} />
     </main>

@@ -57,7 +57,13 @@ const TABS = [
   { id: 'config', label: 'Parâmetros', icon: SlidersIcon },
 ];
 
-export default function AdminNav({ active, onChange, collapsed, onToggle, children }) {
+const ProfileIcon = (
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="8" r="3.5" /><path d="M5 20c0-3.3 3.1-5 7-5s7 1.7 7 5" />
+  </svg>
+);
+
+export default function AdminNav({ active, onChange, collapsed, onToggle, onProfile, children }) {
   const router = useRouter();
   async function handleLogout() {
     await auth.logout();
@@ -99,7 +105,10 @@ export default function AdminNav({ active, onChange, collapsed, onToggle, childr
       {!collapsed && children && <div className={styles.content}>{children}</div>}
 
       <footer className={styles.foot}>
-        {!collapsed && <span className={styles.role}>Administrador</span>}
+        <button type="button" className={styles.profile} onClick={onProfile} aria-label="Meu perfil" title="Meu perfil">
+          {ProfileIcon}
+          {!collapsed && <span>Meu Perfil</span>}
+        </button>
         <button type="button" className={styles.logout} onClick={handleLogout} aria-label="Sair" title="Sair">
           {LogoutIcon}
           {!collapsed && <span>Sair</span>}
