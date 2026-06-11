@@ -153,6 +153,20 @@ button {
   border-top-color: rgba(12, 14, 12, 0.92);
 }
 
+/* Contorno do talhão — amarelo vibrante com pulso (ondas) para destacar */
+@keyframes talhaoPulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 2px rgba(250, 204, 21, 0.85));
+  }
+  50% {
+    filter: drop-shadow(0 0 13px rgba(253, 224, 71, 1));
+  }
+}
+.leaflet-interactive.talhao-pulse {
+  animation: talhaoPulse 1.6s ease-in-out infinite;
+}
+
 /* Popup escuro */
 .leaflet-popup.variant-popup .leaflet-popup-content-wrapper {
   background: rgba(12, 14, 12, 0.94);

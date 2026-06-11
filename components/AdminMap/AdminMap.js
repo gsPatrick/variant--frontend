@@ -215,10 +215,10 @@ export default function AdminMap({ plot, drawActive, drawTool, drawMode, drawCmd
           <GeoJSON
             key={JSON.stringify(geojson)}
             data={geojson}
-            style={{ color: '#f97316', weight: 2, fillOpacity: 0.06 }}
+            style={{ color: '#facc15', weight: 3, fillColor: '#facc15', fillOpacity: 0.08, className: 'talhao-pulse' }}
             onEachFeature={(feature, layer) => {
-              layer.on('mouseover', () => layer.setStyle({ color: '#fbbf24', weight: 3, fillOpacity: 0.2 }));
-              layer.on('mouseout', () => layer.setStyle({ color: '#f97316', weight: 2, fillOpacity: 0.06 }));
+              layer.on('mouseover', () => layer.setStyle({ color: '#fde047', weight: 4, fillOpacity: 0.22 }));
+              layer.on('mouseout', () => layer.setStyle({ color: '#facc15', weight: 3, fillOpacity: 0.08 }));
             }}
           >
             <Tooltip sticky className="variant-tip">

@@ -44,8 +44,9 @@ export default function SafrasMap({ geojson, center, color, marker, info }) {
     [color]
   );
 
+  // Contorno amarelo vibrante pulsante; o preenchimento mantém o tom da cultura.
   const style = useMemo(
-    () => ({ color, weight: 2, opacity: 0.95, fillColor: color, fillOpacity: 0.08 }),
+    () => ({ color: '#facc15', weight: 3, opacity: 1, fillColor: color, fillOpacity: 0.1, className: 'talhao-pulse' }),
     [color]
   );
 
@@ -64,8 +65,8 @@ export default function SafrasMap({ geojson, center, color, marker, info }) {
         data={geojson}
         style={style}
         onEachFeature={(feature, layer) => {
-          layer.on('mouseover', () => layer.setStyle({ weight: 3, fillOpacity: 0.22 }));
-          layer.on('mouseout', () => layer.setStyle({ weight: 2, fillOpacity: 0.08 }));
+          layer.on('mouseover', () => layer.setStyle({ weight: 4, fillOpacity: 0.22 }));
+          layer.on('mouseout', () => layer.setStyle({ weight: 3, fillOpacity: 0.1 }));
         }}
       >
         {info && (
