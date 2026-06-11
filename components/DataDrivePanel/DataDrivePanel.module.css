@@ -201,3 +201,8 @@
   text-align: center;
   color: var(--text-3);
 }
+
+.headBtn {
+  margin-left: auto;
+  flex-shrink: 0;
+}

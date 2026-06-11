@@ -9,6 +9,7 @@ import AdminSidebar from '@/components/AdminSidebar/AdminSidebar';
 import AdminFloating from '@/components/AdminFloating/AdminFloating';
 import DrawToolbar from '@/components/DrawToolbar/DrawToolbar';
 import ImportModal from '@/components/ImportModal/ImportModal';
+import KmlImportModal from '@/components/KmlImportModal/KmlImportModal';
 import RegisterModal from '@/components/RegisterModal/RegisterModal';
 import QuickAddModal from '@/components/QuickAddModal/QuickAddModal';
 import SoilResistanceTable from '@/components/SoilResistanceTable/SoilResistanceTable';
@@ -68,6 +69,7 @@ export default function AdminWorkspacePage() {
   const [timelineOpen, setTimelineOpen] = useState(true);
 
   const [importing, setImporting] = useState(false);
+  const [kmlImporting, setKmlImporting] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [prefillOwner, setPrefillOwner] = useState('');
   const [quickAdd, setQuickAdd] = useState(null);
@@ -440,6 +442,7 @@ export default function AdminWorkspacePage() {
             <DataDrivePanel
               plots={allPlots}
               onOpenImport={() => setImporting(true)}
+              onImportKml={() => setKmlImporting(true)}
               onViewOnMap={(plotId) => { setSelectedPlotId(plotId); setTab('map'); }}
               onToast={setToast}
             />
@@ -485,6 +488,16 @@ export default function AdminWorkspacePage() {
           defaultPlotId={selectedPlotId}
           onClose={() => setImporting(false)}
           onComplete={() => { setImporting(false); fetchTree(); }}
+          onToast={setToast}
+        />
+      )}
+
+      {kmlImporting && (
+        <KmlImportModal
+          plots={allPlots}
+          defaultPlotId={selectedPlotId}
+          onClose={() => setKmlImporting(false)}
+          onComplete={() => { setKmlImporting(false); fetchTree(); }}
           onToast={setToast}
         />
       )}

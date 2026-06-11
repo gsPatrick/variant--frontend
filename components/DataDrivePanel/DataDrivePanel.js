@@ -57,7 +57,7 @@ function geojsonToKml(geo, name) {
   return `<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>${name}</name>${placemarks}</Document></kml>`;
 }
 
-export default function DataDrivePanel({ plots = [], onOpenImport, onViewOnMap, onToast }) {
+export default function DataDrivePanel({ plots = [], onOpenImport, onImportKml, onViewOnMap, onToast }) {
   const contourRows = plots.filter(hasContour).map((p) => ({
     id: p.id,
     name: p.name,
@@ -122,6 +122,7 @@ export default function DataDrivePanel({ plots = [], onOpenImport, onViewOnMap, 
               <h2 className={styles.cardTitle}>Contornos Geográficos</h2>
               <p className={styles.cardSub}>Talhões com contorno definido</p>
             </div>
+            <Button variant="secondary" className={styles.headBtn} onClick={onImportKml}>+ Importar KML</Button>
           </div>
           <div className={styles.tableWrap}>
             {contourRows.length === 0 ? (
@@ -129,7 +130,8 @@ export default function DataDrivePanel({ plots = [], onOpenImport, onViewOnMap, 
                 compact
                 icon={MapPin}
                 title="Nenhum contorno ainda"
-                description="Desenhe o contorno de um talhão no Mapa de Gestão (ou importe um KML) para vê-lo aqui."
+                description="Suba um arquivo KML ou desenhe o contorno no Mapa de Gestão."
+                action={<Button variant="secondary" onClick={onImportKml}>Importar KML</Button>}
               />
             ) : (
               <table className={styles.table}>
