@@ -65,6 +65,8 @@ export default function WorkspacePage() {
   // SOLOS
   const [nutrient, setNutrient] = useState('calcio');
   const [year, setYear] = useState(null);
+  const [depth, setDepth] = useState(null);
+  const [depths, setDepths] = useState([]);
   const [evolution, setEvolution] = useState(null);
   const [satSeries, setSatSeries] = useState([]);
   const [moSeries, setMoSeries] = useState([]);
@@ -115,6 +117,32 @@ export default function WorkspacePage() {
     setPlot(first ? first.id : '');
   }
 
+  // ----- SOLOS: profundidades disponíveis (20 cm / 40 cm) -----
+  useEffect(() => {
+    if (!plot) {
+      setDepths([]);
+      setDepth(null);
+      return undefined;
+    }
+    let cancel = false;
+    (async () => {
+      try {
+        const data = await plotsApi.depths(plot);
+        const list = data.depths || [];
+        if (!cancel) {
+          setDepths(list);
+          setDepth(list.length ? list[0] : null);
+        }
+      } catch {
+        if (!cancel) {
+          setDepths([]);
+          setDepth(null);
+        }
+      }
+    })();
+    return () => { cancel = true; };
+  }, [plot]);
+
   // ----- SOLOS: evolução (barras + KPIs) -----
   useEffect(() => {
     if (!plot) {
@@ -124,7 +152,7 @@ export default function WorkspacePage() {
     let cancel = false;
     (async () => {
       try {
-        const data = await plotsApi.evolution(plot, nutrient);
+        const data = await plotsApi.evolution(plot, nutrient, depth);
         if (!cancel) {
           const series = normSeries(data.series);
           setEvolution({ ...data, series });
@@ -136,7 +164,7 @@ export default function WorkspacePage() {
       }
     })();
     return () => { cancel = true; };
-  }, [plot, nutrient]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [plot, nutrient, depth]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!plot) return undefined;
@@ -144,8 +172,8 @@ export default function WorkspacePage() {
     (async () => {
       try {
         const [sat, mo] = await Promise.all([
-          plotsApi.evolution(plot, 'saturacao'),
-          plotsApi.evolution(plot, 'materia_organica'),
+          plotsApi.evolution(plot, 'saturacao', depth),
+          plotsApi.evolution(plot, 'materia_organica', depth),
         ]);
         if (!cancel) {
           setSatSeries(normSeries(sat.series));
@@ -159,7 +187,7 @@ export default function WorkspacePage() {
       }
     })();
     return () => { cancel = true; };
-  }, [plot]);
+  }, [plot, depth]);
 
   // ----- SOLOS: radar (teores do ano) -----
   useEffect(() => {
@@ -170,7 +198,7 @@ export default function WorkspacePage() {
     let cancel = false;
     (async () => {
       try {
-        const data = await plotsApi.radar(plot, year);
+        const data = await plotsApi.radar(plot, year, depth);
         // Guarda só o teor bruto; o nível (%) é calculado no render com os
         // ideais configurados pelo agrônomo (settingsApi).
         if (!cancel) setRadar((data.teores || []).map((t) => ({ nutriente: t.nutriente, teor: num(t.valor) })));
@@ -179,7 +207,7 @@ export default function WorkspacePage() {
       }
     })();
     return () => { cancel = true; };
-  }, [plot, year]);
+  }, [plot, year, depth]);
 
   // ----- Ideais do radar (referência agronômica configurada pelo admin) -----
   useEffect(() => {
@@ -357,6 +385,16 @@ export default function WorkspacePage() {
                     <label className={styles.filterLabel}>Ano de análise</label>
                     <Select options={yearOptions} value={String(year)} onChange={(v) => setYear(Number(v))} />
                   </div>
+                  {depths.length > 0 && (
+                    <div className={styles.filterField}>
+                      <label className={styles.filterLabel}>Profundidade</label>
+                      <Select
+                        options={depths.map((d) => ({ value: d, label: d }))}
+                        value={depth || ''}
+                        onChange={setDepth}
+                      />
+                    </div>
+                  )}
                 </div>
               </GlassCard>
 
