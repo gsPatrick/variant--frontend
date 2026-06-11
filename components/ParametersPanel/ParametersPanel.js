@@ -18,6 +18,7 @@ const NUTRIENTS = [
   { key: 'Cu', label: 'Cobre (Cu)', unit: 'mg/dm³' },
   { key: 'B', label: 'Boro (B)', unit: 'mg/dm³' },
   { key: 'V', label: 'Saturação de Bases (V%)', unit: '%' },
+  { key: 'pH', label: 'pH (CaCl₂)', unit: '' },
 ];
 
 const Info = (

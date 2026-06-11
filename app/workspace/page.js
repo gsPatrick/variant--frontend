@@ -34,7 +34,7 @@ const BAR_NUTRIENTS = [
   { value: 'materia_organica', label: 'Matéria Orgânica', unit: 'g/dm³' },
   { value: 'saturacao', label: 'Saturação (V%)', unit: '%' },
 ];
-const RADAR_IDEAL = { P: 18, Zn: 2.2, Mn: 22, Fe: 50, Cu: 1.8, B: 0.6, Mg: 2, Ca: 6, S: 12, K: 120, V: 70 };
+const RADAR_IDEAL = { P: 18, Zn: 2.2, Mn: 22, Fe: 50, Cu: 1.8, B: 0.6, Mg: 2, Ca: 6, S: 12, K: 120, V: 70, pH: 5.5 };
 
 const num = (v) => (v == null || v === '' ? null : Number(v));
 const normSeries = (s) => (s || []).map((p) => ({ year: Number(p.year), valor: num(p.valor) }));
