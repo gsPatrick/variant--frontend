@@ -8,7 +8,7 @@ import { settingsApi } from '@/lib/api';
 // Metadados dos nutrientes do radar (rótulo + unidade) — só para exibição.
 const NUTRIENTS = [
   { key: 'P', label: 'Fósforo (P)', unit: 'mg/dm³' },
-  { key: 'K', label: 'Potássio (K)', unit: 'cmolc/dm³' },
+  { key: 'K', label: 'Potássio (K)', unit: 'mg/dm³' },
   { key: 'Ca', label: 'Cálcio (Ca)', unit: 'cmolc/dm³' },
   { key: 'Mg', label: 'Magnésio (Mg)', unit: 'cmolc/dm³' },
   { key: 'S', label: 'Enxofre (S)', unit: 'mg/dm³' },
@@ -17,6 +17,7 @@ const NUTRIENTS = [
   { key: 'Fe', label: 'Ferro (Fe)', unit: 'mg/dm³' },
   { key: 'Cu', label: 'Cobre (Cu)', unit: 'mg/dm³' },
   { key: 'B', label: 'Boro (B)', unit: 'mg/dm³' },
+  { key: 'V', label: 'Saturação de Bases (V%)', unit: '%' },
 ];
 
 const Info = (

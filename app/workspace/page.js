@@ -28,13 +28,13 @@ const cx = (...c) => c.filter(Boolean).join(' ');
 const BAR_NUTRIENTS = [
   { value: 'calcio', label: 'Cálcio', unit: 'cmolc/dm³' },
   { value: 'magnesio', label: 'Magnésio', unit: 'cmolc/dm³' },
-  { value: 'potassio', label: 'Potássio', unit: 'cmolc/dm³' },
+  { value: 'potassio', label: 'Potássio', unit: 'mg/dm³' },
   { value: 'fosforo', label: 'Fósforo', unit: 'mg/dm³' },
   { value: 'enxofre', label: 'Enxofre', unit: 'mg/dm³' },
   { value: 'materia_organica', label: 'Matéria Orgânica', unit: 'g/dm³' },
   { value: 'saturacao', label: 'Saturação (V%)', unit: '%' },
 ];
-const RADAR_IDEAL = { P: 18, Zn: 2.2, Mn: 22, Fe: 50, Cu: 1.8, B: 0.6, Mg: 2, Ca: 6, S: 12, K: 0.45 };
+const RADAR_IDEAL = { P: 18, Zn: 2.2, Mn: 22, Fe: 50, Cu: 1.8, B: 0.6, Mg: 2, Ca: 6, S: 12, K: 120, V: 70 };
 
 const num = (v) => (v == null || v === '' ? null : Number(v));
 const normSeries = (s) => (s || []).map((p) => ({ year: Number(p.year), valor: num(p.valor) }));
