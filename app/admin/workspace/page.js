@@ -74,6 +74,7 @@ export default function AdminWorkspacePage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [prefillOwner, setPrefillOwner] = useState('');
   const [quickAdd, setQuickAdd] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(null);
   const [editUser, setEditUser] = useState(null);
   const [confirmUser, setConfirmUser] = useState(null);
   const [toast, setToast] = useState('');
@@ -269,20 +270,45 @@ export default function AdminWorkspacePage() {
     setToast('Proprietário cadastrado com sucesso!');
   }
 
-  // ----- Adicionar fazenda/talhão a um existente (sidebar) -----
-  async function handleQuickAdd(payload) {
+  // ----- Adicionar / editar fazenda e talhão (sidebar) -----
+  async function handleQuickSubmit(payload) {
     if (!quickAdd) return;
-    if (quickAdd.mode === 'farm') {
+    const { mode, action } = quickAdd;
+    if (mode === 'farm' && action === 'edit') {
+      await farmsApi.update(quickAdd.farm.id, payload);
+      setToast('Fazenda atualizada.');
+    } else if (mode === 'farm') {
       const farm = await farmsApi.create({ producerId: quickAdd.owner.id, ...payload });
-      setQuickAdd(null);
-      await fetchTree();
       setToast(`Fazenda "${farm.name}" adicionada a ${quickAdd.owner.name}.`);
+    } else if (mode === 'plot' && action === 'edit') {
+      await plotsApi.update(quickAdd.plot.id, { name: payload.name });
+      setToast('Talhão renomeado.');
     } else {
       const plot = await plotsApi.create({ farmId: quickAdd.farm.id, name: payload.name });
-      setQuickAdd(null);
-      await fetchTree();
       setSelectedPlotId(plot.id);
       setToast(`Talhão "${plot.name}" adicionado a ${quickAdd.farm.name}.`);
+    }
+    setQuickAdd(null);
+    await fetchTree();
+  }
+
+  // ----- Excluir fazenda / talhão (sidebar) -----
+  async function handleConfirmDelete() {
+    if (!confirmDelete) return;
+    try {
+      if (confirmDelete.type === 'farm') {
+        await farmsApi.remove(confirmDelete.farm.id);
+        setToast('Fazenda excluída.');
+      } else {
+        await plotsApi.remove(confirmDelete.plot.id);
+        if (selectedPlotId === confirmDelete.plot.id) setSelectedPlotId(null);
+        setToast('Talhão excluído.');
+      }
+      setConfirmDelete(null);
+      await fetchTree();
+    } catch (err) {
+      setToast(err.message);
+      setConfirmDelete(null);
     }
   }
 
@@ -359,9 +385,13 @@ export default function AdminWorkspacePage() {
               owners={tree}
               loading={loading}
               onAdd={() => setModalOpen(true)}
-              onAddFarm={(owner) => setQuickAdd({ mode: 'farm', owner })}
-              onAddPlot={(owner, farm) => setQuickAdd({ mode: 'plot', owner, farm })}
+              onAddFarm={(owner) => setQuickAdd({ mode: 'farm', action: 'create', owner })}
+              onAddPlot={(owner, farm) => setQuickAdd({ mode: 'plot', action: 'create', owner, farm })}
+              onEditFarm={(owner, farm) => setQuickAdd({ mode: 'farm', action: 'edit', owner, farm })}
+              onDeleteFarm={(owner, farm) => setConfirmDelete({ type: 'farm', owner, farm })}
               onEditPlot={handleEditPlot}
+              onRenamePlot={(owner, farm, plot) => setQuickAdd({ mode: 'plot', action: 'edit', owner, farm, plot })}
+              onDeletePlot={(owner, farm, plot) => setConfirmDelete({ type: 'plot', owner, farm, plot })}
               activePlotId={drawActive ? selectedPlotId : null}
             />
           )}
@@ -516,9 +546,16 @@ export default function AdminWorkspacePage() {
       {quickAdd && (
         <QuickAddModal
           mode={quickAdd.mode}
-          targetName={quickAdd.mode === 'farm' ? quickAdd.owner.name : quickAdd.farm.name}
+          targetName={quickAdd.action === 'edit' ? undefined : (quickAdd.mode === 'farm' ? quickAdd.owner?.name : quickAdd.farm?.name)}
+          initial={
+            quickAdd.action !== 'edit'
+              ? undefined
+              : quickAdd.mode === 'farm'
+                ? { name: quickAdd.farm.name, state: quickAdd.farm.state || '', city: quickAdd.farm.city || '' }
+                : { name: quickAdd.plot.name }
+          }
           onClose={() => setQuickAdd(null)}
-          onSubmit={handleQuickAdd}
+          onSubmit={handleQuickSubmit}
         />
       )}
 
@@ -530,6 +567,19 @@ export default function AdminWorkspacePage() {
           message={`Excluir "${confirmUser.name}" e todos os dados vinculados? Esta ação não pode ser desfeita.`}
           onConfirm={deleteUser}
           onCancel={() => setConfirmUser(null)}
+        />
+      )}
+
+      {confirmDelete && (
+        <ConfirmDialog
+          title={confirmDelete.type === 'farm' ? 'Excluir fazenda' : 'Excluir talhão'}
+          message={
+            confirmDelete.type === 'farm'
+              ? `Excluir a fazenda "${confirmDelete.farm.name}" e TODOS os talhões, análises e safras dela? Esta ação não pode ser desfeita.`
+              : `Excluir o talhão "${confirmDelete.plot.name}" e todos os dados dele (análises, resistência, safras)? Esta ação não pode ser desfeita.`
+          }
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setConfirmDelete(null)}
         />
       )}
 

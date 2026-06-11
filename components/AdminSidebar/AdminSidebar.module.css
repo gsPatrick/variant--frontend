@@ -88,3 +88,34 @@
   color: var(--text-3);
   font-size: 0.88rem;
 }
+
+/* Ações por linha (fazenda/talhão) */
+.rowActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-3);
+  cursor: pointer;
+  transition: color 0.2s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.iconBtn svg { width: 14px; height: 14px; }
+.iconBtn:hover {
+  color: var(--green);
+  background: var(--green-soft);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+.iconBtn.danger:hover {
+  color: #fda4af;
+  background: rgba(251, 113, 133, 0.12);
+  border-color: rgba(251, 113, 133, 0.4);
+}

@@ -6,6 +6,8 @@ import Input from '../Input/Input';
 import TreeNode from '../TreeNode/TreeNode';
 import EmptyState from '../EmptyState/EmptyState';
 
+const cx = (...c) => c.filter(Boolean).join(' ');
+
 const Search = (
   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="11" cy="11" r="7" />
@@ -41,8 +43,30 @@ const Pin = (
     <circle cx="12" cy="11" r="2.2" />
   </svg>
 );
+const Shape = (
+  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 3l8 6-3 9H7L4 9z" />
+  </svg>
+);
+const Trash = (
+  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14" />
+  </svg>
+);
 
-export default function AdminSidebar({ owners = [], loading = false, onAdd, onAddFarm, onAddPlot, onEditPlot, activePlotId }) {
+export default function AdminSidebar({
+  owners = [],
+  loading = false,
+  onAdd,
+  onAddFarm,
+  onAddPlot,
+  onEditFarm,
+  onDeleteFarm,
+  onEditPlot,
+  onRenamePlot,
+  onDeletePlot,
+  activePlotId,
+}) {
   const [query, setQuery] = useState('');
   const q = query.trim().toLowerCase();
 
@@ -97,15 +121,17 @@ export default function AdminSidebar({ owners = [], loading = false, onAdd, onAd
                   meta={`${farm.plots.length} tal.`}
                   defaultExpanded
                   action={
-                    <button
-                      type="button"
-                      className={styles.addRow}
-                      onClick={() => onAddPlot && onAddPlot(owner, farm)}
-                      aria-label={`Adicionar talhão em ${farm.name}`}
-                      title="Adicionar talhão"
-                    >
-                      {Plus}
-                    </button>
+                    <span className={styles.rowActions}>
+                      <button type="button" className={styles.iconBtn} onClick={() => onAddPlot && onAddPlot(owner, farm)} title="Adicionar talhão" aria-label={`Adicionar talhão em ${farm.name}`}>
+                        {Plus}
+                      </button>
+                      <button type="button" className={styles.iconBtn} onClick={() => onEditFarm && onEditFarm(owner, farm)} title="Editar fazenda" aria-label={`Editar ${farm.name}`}>
+                        {Pencil}
+                      </button>
+                      <button type="button" className={cx(styles.iconBtn, styles.danger)} onClick={() => onDeleteFarm && onDeleteFarm(owner, farm)} title="Excluir fazenda" aria-label={`Excluir ${farm.name}`}>
+                        {Trash}
+                      </button>
+                    </span>
                   }
                 >
                   {plots.map((plot) => (
@@ -116,15 +142,17 @@ export default function AdminSidebar({ owners = [], loading = false, onAdd, onAd
                       icon={Pin}
                       active={activePlotId === plot.id}
                       action={
-                        <button
-                          type="button"
-                          className={styles.pencil}
-                          onClick={() => onEditPlot(plot)}
-                          aria-label={`Editar contorno de ${plot.name}`}
-                          title="Editar contorno"
-                        >
-                          {Pencil}
-                        </button>
+                        <span className={styles.rowActions}>
+                          <button type="button" className={styles.iconBtn} onClick={() => onEditPlot(plot)} title="Editar contorno" aria-label={`Contorno de ${plot.name}`}>
+                            {Shape}
+                          </button>
+                          <button type="button" className={styles.iconBtn} onClick={() => onRenamePlot && onRenamePlot(owner, farm, plot)} title="Renomear talhão" aria-label={`Renomear ${plot.name}`}>
+                            {Pencil}
+                          </button>
+                          <button type="button" className={cx(styles.iconBtn, styles.danger)} onClick={() => onDeletePlot && onDeletePlot(owner, farm, plot)} title="Excluir talhão" aria-label={`Excluir ${plot.name}`}>
+                            {Trash}
+                          </button>
+                        </span>
                       }
                     />
                   ))}

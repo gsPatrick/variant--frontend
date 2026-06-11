@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './QuickAddModal.module.css';
 import Input from '../Input/Input';
 import Button from '../Button/Button';
@@ -18,17 +18,30 @@ const Pin = (
   </svg>
 );
 
-export default function QuickAddModal({ mode, targetName, onClose, onSubmit }) {
+export default function QuickAddModal({ mode, targetName, initial, onClose, onSubmit }) {
   const isFarm = mode === 'farm';
-  const [name, setName] = useState('');
-  const [state, setState] = useState('');
-  const [city, setCity] = useState('');
+  const editing = Boolean(initial);
+  const [name, setName] = useState(initial?.name ?? '');
+  const [state, setState] = useState(initial?.state ?? '');
+  const [city, setCity] = useState(initial?.city ?? '');
   const [cities, setCities] = useState([]);
   const [loadingCities, setLoadingCities] = useState(false);
   const [geocoding, setGeocoding] = useState(false);
   const [coord, setCoord] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  // Edição de fazenda: carrega as cidades da UF já salva (pra mostrar a seleção).
+  useEffect(() => {
+    if (isFarm && initial?.state) {
+      setLoadingCities(true);
+      fetchCities(initial.state)
+        .then(setCities)
+        .catch(() => setCities([]))
+        .finally(() => setLoadingCities(false));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function onStateChange(uf) {
     setState(uf);
@@ -83,8 +96,8 @@ export default function QuickAddModal({ mode, targetName, onClose, onSubmit }) {
       <div className={styles.modal} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
         <header className={styles.head}>
           <div>
-            <p className={styles.kicker}>{isFarm ? 'Nova fazenda' : 'Novo talhão'}</p>
-            <h2 className={styles.title}>{isFarm ? 'Adicionar fazenda' : 'Adicionar talhão'}</h2>
+            <p className={styles.kicker}>{editing ? (isFarm ? 'Editar fazenda' : 'Editar talhão') : (isFarm ? 'Nova fazenda' : 'Novo talhão')}</p>
+            <h2 className={styles.title}>{editing ? (isFarm ? 'Editar fazenda' : 'Renomear talhão') : (isFarm ? 'Adicionar fazenda' : 'Adicionar talhão')}</h2>
             {targetName && <p className={styles.sub}>{isFarm ? 'para' : 'em'} {targetName}</p>}
           </div>
           <button type="button" className={styles.close} onClick={onClose} aria-label="Fechar">
@@ -143,7 +156,7 @@ export default function QuickAddModal({ mode, targetName, onClose, onSubmit }) {
             Cancelar
           </Button>
           <Button variant="primary" onClick={submit} loading={submitting}>
-            Adicionar
+            {editing ? 'Salvar' : 'Adicionar'}
           </Button>
         </footer>
       </div>
