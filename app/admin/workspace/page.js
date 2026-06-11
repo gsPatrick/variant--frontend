@@ -19,6 +19,7 @@ import EditUserModal from '@/components/EditUserModal/EditUserModal';
 import ConfirmDialog from '@/components/ConfirmDialog/ConfirmDialog';
 import DataDrivePanel from '@/components/DataDrivePanel/DataDrivePanel';
 import SafrasManager from '@/components/SafrasManager/SafrasManager';
+import ParametersPanel from '@/components/ParametersPanel/ParametersPanel';
 import Timeline from '@/components/Timeline/Timeline';
 import EventModal from '@/components/EventModal/EventModal';
 
@@ -466,6 +467,12 @@ export default function AdminWorkspacePage() {
               onNewOnboarding={newOnboarding}
               onAdd={() => setModalOpen(true)}
             />
+          </div>
+        )}
+
+        {tab === 'config' && (
+          <div className={styles.panelWrap}>
+            <ParametersPanel onToast={setToast} />
           </div>
         )}
       </div>

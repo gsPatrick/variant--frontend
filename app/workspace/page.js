@@ -16,7 +16,7 @@ import FloatingControls from '@/components/FloatingControls/FloatingControls';
 import EmptyState from '@/components/EmptyState/EmptyState';
 import SoilResistanceTable from '@/components/SoilResistanceTable/SoilResistanceTable';
 
-import { farmsApi, plotsApi, seasonsApi, mediaUrl } from '@/lib/api';
+import { farmsApi, plotsApi, seasonsApi, settingsApi, mediaUrl } from '@/lib/api';
 
 const SafrasMap = dynamic(() => import('@/components/SafrasMap/SafrasMap'), {
   ssr: false,
@@ -69,6 +69,7 @@ export default function WorkspacePage() {
   const [satSeries, setSatSeries] = useState([]);
   const [moSeries, setMoSeries] = useState([]);
   const [radar, setRadar] = useState(null);
+  const [radarIdeals, setRadarIdeals] = useState(RADAR_IDEAL);
   const [resistance, setResistance] = useState([]);
 
   // SAFRAS
@@ -170,22 +171,27 @@ export default function WorkspacePage() {
     (async () => {
       try {
         const data = await plotsApi.radar(plot, year);
-        if (!cancel) {
-          setRadar((data.teores || []).map((t) => {
-            const teor = num(t.valor);
-            return {
-              nutriente: t.nutriente,
-              teor,
-              nivel: teor == null ? 0 : Math.min(100, Math.round((teor / (RADAR_IDEAL[t.nutriente] || 1)) * 100)),
-            };
-          }));
-        }
+        // Guarda só o teor bruto; o nível (%) é calculado no render com os
+        // ideais configurados pelo agrônomo (settingsApi).
+        if (!cancel) setRadar((data.teores || []).map((t) => ({ nutriente: t.nutriente, teor: num(t.valor) })));
       } catch {
         if (!cancel) setRadar(null);
       }
     })();
     return () => { cancel = true; };
   }, [plot, year]);
+
+  // ----- Ideais do radar (referência agronômica configurada pelo admin) -----
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await settingsApi.getRadarIdeals();
+        if (data?.ideals) setRadarIdeals(data.ideals);
+      } catch {
+        /* mantém os padrões */
+      }
+    })();
+  }, []);
 
   // ----- SOLOS: resistência do solo (compactação) -----
   useEffect(() => {
@@ -252,6 +258,12 @@ export default function WorkspacePage() {
   const prevVal = yIdx > 0 ? series[yIdx - 1]?.valor : null;
   const deltaPct = curVal != null && prevVal ? Math.round(((curVal - prevVal) / prevVal) * 100) : null;
   const fmt = (v) => (v == null ? '—' : v);
+
+  const radarData = (radar || []).map((t) => ({
+    nutriente: t.nutriente,
+    teor: t.teor,
+    nivel: t.teor == null ? 0 : Math.min(100, Math.round((t.teor / (radarIdeals[t.nutriente] || 1)) * 100)),
+  }));
 
   const selectedEvent = safraEvents.find((e) => e.id === selectedEventId) || null;
   const safraCrop = mapData?.safraAtiva?.crop || '';
@@ -388,8 +400,8 @@ export default function WorkspacePage() {
                     <p className={styles.cardKicker}>Teores do ano · {year}</p>
                     <h2 className={styles.cardTitle}>Perfil de nutrientes</h2>
                   </div>
-                  {radar && radar.length > 0 ? (
-                    <RadarTeores data={radar} />
+                  {radarData.length > 0 ? (
+                    <RadarTeores data={radarData} />
                   ) : (
                     <EmptyState compact title="Sem dados para o ano" description="Selecione outro ano com análise." />
                   )}
