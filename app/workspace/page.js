@@ -69,7 +69,7 @@ export default function WorkspacePage() {
   const [depths, setDepths] = useState([]);
   const [evolution, setEvolution] = useState(null);
   const [satSeries, setSatSeries] = useState([]);
-  const [moSeries, setMoSeries] = useState([]);
+  const [phSeries, setPhSeries] = useState([]);
   const [radar, setRadar] = useState(null);
   const [radarIdeals, setRadarIdeals] = useState(RADAR_IDEAL);
   const [resistance, setResistance] = useState([]);
@@ -171,18 +171,18 @@ export default function WorkspacePage() {
     let cancel = false;
     (async () => {
       try {
-        const [sat, mo] = await Promise.all([
+        const [sat, ph] = await Promise.all([
           plotsApi.evolution(plot, 'saturacao', depth),
-          plotsApi.evolution(plot, 'materia_organica', depth),
+          plotsApi.evolution(plot, 'ph_cacl2', depth),
         ]);
         if (!cancel) {
           setSatSeries(normSeries(sat.series));
-          setMoSeries(normSeries(mo.series));
+          setPhSeries(normSeries(ph.series));
         }
       } catch {
         if (!cancel) {
           setSatSeries([]);
-          setMoSeries([]);
+          setPhSeries([]);
         }
       }
     })();
@@ -417,8 +417,8 @@ export default function WorkspacePage() {
                   <p className={styles.kpiSub}>em {year}</p>
                 </GlassCard>
                 <GlassCard className={styles.kpi}>
-                  <p className={styles.kpiLabel}>Matéria Orgânica</p>
-                  <p className={styles.kpiValue}>{fmt(valueAt(moSeries, year))} <span className={styles.kpiUnit}>g/dm³</span></p>
+                  <p className={styles.kpiLabel}>pH (CaCl₂)</p>
+                  <p className={styles.kpiValue}>{fmt(valueAt(phSeries, year))}</p>
                   <p className={styles.kpiSub}>em {year}</p>
                 </GlassCard>
               </div>
