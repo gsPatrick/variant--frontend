@@ -206,3 +206,30 @@
   margin-left: auto;
   flex-shrink: 0;
 }
+
+/* Confirmação inline (excluir análise) */
+.confirmRow {
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+.confirmDanger,
+.confirmCancel {
+  padding: 0.3rem 0.6rem;
+  border-radius: 7px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.confirmDanger {
+  border: none;
+  background: #ef4444;
+  color: #fff;
+}
+.confirmDanger:hover { filter: brightness(1.08); }
+.confirmCancel {
+  border: 1px solid var(--glass-border);
+  background: transparent;
+  color: var(--text-2);
+}
+.confirmCancel:hover { color: #fff; background: rgba(255,255,255,0.06); }

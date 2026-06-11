@@ -1,8 +1,10 @@
 'use client';
 
+import { useCallback, useEffect, useState } from 'react';
 import styles from './DataDrivePanel.module.css';
 import Button from '../Button/Button';
 import EmptyState from '../EmptyState/EmptyState';
+import { plotsApi } from '@/lib/api';
 
 const cx = (...c) => c.filter(Boolean).join(' ');
 
@@ -19,6 +21,11 @@ const MapPin = (
 const EyeMap = (
   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
     <path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z" /><path d="M9 4v14M15 6v14" />
+  </svg>
+);
+const Trash = (
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14" />
   </svg>
 );
 const Globe = (
@@ -58,6 +65,50 @@ function geojsonToKml(geo, name) {
 }
 
 export default function DataDrivePanel({ plots = [], onOpenImport, onImportKml, onViewOnMap, onToast }) {
+  const [analysisRows, setAnalysisRows] = useState([]);
+  const [loadingAnalyses, setLoadingAnalyses] = useState(true);
+  const [confirmId, setConfirmId] = useState(null);
+
+  const plotsKey = plots.map((p) => p.id).join(',');
+
+  const loadAnalyses = useCallback(async () => {
+    if (plots.length === 0) {
+      setAnalysisRows([]);
+      setLoadingAnalyses(false);
+      return;
+    }
+    setLoadingAnalyses(true);
+    try {
+      const results = await Promise.all(
+        plots.map((p) =>
+          plotsApi
+            .listAnalyses(p.id)
+            .then((d) => (d.analyses || []).map((a) => ({ ...a, plotId: p.id, plot: `${p.name} · ${p.farmName}` })))
+            .catch(() => [])
+        )
+      );
+      setAnalysisRows(results.flat());
+    } finally {
+      setLoadingAnalyses(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plotsKey]);
+
+  useEffect(() => {
+    loadAnalyses();
+  }, [loadAnalyses]);
+
+  async function deleteAnalysis(row) {
+    try {
+      await plotsApi.removeAnalysis(row.plotId, row.id);
+      setConfirmId(null);
+      onToast('Análise excluída.');
+      await loadAnalyses();
+    } catch (err) {
+      onToast(err.message || 'Falha ao excluir a análise.');
+    }
+  }
+
   const contourRows = plots.filter(hasContour).map((p) => ({
     id: p.id,
     name: p.name,
@@ -101,17 +152,49 @@ export default function DataDrivePanel({ plots = [], onOpenImport, onImportKml, 
             <span className={styles.cardIcon}>{Sheet}</span>
             <div>
               <h2 className={styles.cardTitle}>Análises Químicas</h2>
-              <p className={styles.cardSub}>Planilhas XLSX / CSV processadas</p>
+              <p className={styles.cardSub}>Análises importadas por talhão, ano e profundidade</p>
             </div>
+            <Button variant="secondary" className={styles.headBtn} onClick={onOpenImport}>+ Importar análises</Button>
           </div>
           <div className={styles.tableWrap}>
-            <EmptyState
-              compact
-              icon={Sheet}
-              title="Importe a primeira planilha"
-              description="As análises de solo importadas vão aparecer aqui por talhão e ano."
-              action={<Button variant="secondary" onClick={onOpenImport}>Importar análises</Button>}
-            />
+            {loadingAnalyses ? (
+              <p className={styles.empty}>Carregando…</p>
+            ) : analysisRows.length === 0 ? (
+              <EmptyState
+                compact
+                icon={Sheet}
+                title="Nenhuma análise importada"
+                description="Importe uma planilha para ver as análises por talhão, ano e profundidade."
+                action={<Button variant="secondary" onClick={onOpenImport}>Importar análises</Button>}
+              />
+            ) : (
+              <table className={styles.table}>
+                <thead>
+                  <tr><th>Talhão</th><th>Ano</th><th>Profundidade</th><th className={styles.right}>Ação</th></tr>
+                </thead>
+                <tbody>
+                  {analysisRows.map((r) => (
+                    <tr key={r.id}>
+                      <td className={styles.file}>{r.plot}</td>
+                      <td className={styles.muted}>{r.year}</td>
+                      <td className={styles.muted}>{r.depth || '—'}</td>
+                      <td className={styles.right}>
+                        {confirmId === r.id ? (
+                          <span className={styles.confirmRow}>
+                            <button type="button" className={styles.confirmDanger} onClick={() => deleteAnalysis(r)}>Excluir</button>
+                            <button type="button" className={styles.confirmCancel} onClick={() => setConfirmId(null)}>Não</button>
+                          </span>
+                        ) : (
+                          <button type="button" className={cx(styles.action, styles.danger)} onClick={() => setConfirmId(r.id)} title="Excluir análise" aria-label="Excluir análise">
+                            {Trash}
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </section>
 
