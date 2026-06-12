@@ -60,6 +60,13 @@ function SeasonCard({ season, plotLabel, onChanged, onToast }) {
   const [savingEvent, setSavingEvent] = useState(false);
   const [confirmDelEventId, setConfirmDelEventId] = useState(null);
 
+  // Paginação dos eventos
+  const [eventPage, setEventPage] = useState(0);
+  const EVENTS_PER_PAGE = 4;
+  const totalEventPages = Math.max(1, Math.ceil(events.length / EVENTS_PER_PAGE));
+  const page = Math.min(eventPage, totalEventPages - 1);
+  const pagedEvents = events.slice(page * EVENTS_PER_PAGE, (page + 1) * EVENTS_PER_PAGE);
+
   const load = useCallback(async () => {
     try {
       const data = await seasonsApi.events(season.id);
@@ -221,10 +228,15 @@ function SeasonCard({ season, plotLabel, onChanged, onToast }) {
       )}
 
       <div className={styles.events}>
+        {!loading && events.length > 0 && (
+          <div className={styles.eventsHead}>
+            <span className={styles.eventsCount}>{events.length} evento{events.length > 1 ? 's' : ''}</span>
+          </div>
+        )}
         {loading && <p className={styles.noEvents}>Carregando eventos…</p>}
         {!loading && events.length === 0 && <p className={styles.noEvents}>Nenhum evento cadastrado ainda.</p>}
 
-        {!loading && events.map((e) => (
+        {!loading && pagedEvents.map((e) => (
           editingEventId === e.id ? (
             <div key={e.id} className={styles.addForm}>
               <div className={styles.addRow}>
@@ -282,6 +294,14 @@ function SeasonCard({ season, plotLabel, onChanged, onToast }) {
           )
         ))}
 
+        {!loading && totalEventPages > 1 && (
+          <div className={styles.pager}>
+            <button type="button" className={styles.pagerBtn} disabled={page === 0} onClick={() => setEventPage(page - 1)} aria-label="Anterior">‹</button>
+            <span className={styles.pagerInfo}>{page + 1} / {totalEventPages}</span>
+            <button type="button" className={styles.pagerBtn} disabled={page >= totalEventPages - 1} onClick={() => setEventPage(page + 1)} aria-label="Próximo">›</button>
+          </div>
+        )}
+
         {adding ? (
           <div className={styles.addForm}>
             <div className={styles.addRow}>
@@ -321,6 +341,7 @@ export default function SafrasManager({ plotOptions = [], cropOptions, yearOptio
   const [crop, setCrop] = useState('');
   const [variety, setVariety] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [seasonPage, setSeasonPage] = useState(0);
 
   const labelOfPlot = (id) => plotOptions.find((p) => p.value === id)?.label || 'Talhão';
 
@@ -374,6 +395,12 @@ export default function SafrasManager({ plotOptions = [], cropOptions, yearOptio
 
   const noPlots = plotOptions.length === 0;
 
+  // Paginação das safras
+  const SEASONS_PER_PAGE = 5;
+  const totalSeasonPages = Math.max(1, Math.ceil(seasons.length / SEASONS_PER_PAGE));
+  const sPage = Math.min(seasonPage, totalSeasonPages - 1);
+  const pagedSeasons = seasons.slice(sPage * SEASONS_PER_PAGE, (sPage + 1) * SEASONS_PER_PAGE);
+
   return (
     <div className={styles.panel}>
       <header className={styles.head}>
@@ -425,7 +452,7 @@ export default function SafrasManager({ plotOptions = [], cropOptions, yearOptio
               />
             )}
 
-            {!loading && seasons.map((s) => (
+            {!loading && pagedSeasons.map((s) => (
               <SeasonCard
                 key={s.id}
                 season={s}
@@ -435,6 +462,14 @@ export default function SafrasManager({ plotOptions = [], cropOptions, yearOptio
               />
             ))}
           </div>
+
+          {!loading && totalSeasonPages > 1 && (
+            <div className={cx(styles.pager, styles.pagerBar)}>
+              <button type="button" className={styles.pagerBtn} disabled={sPage === 0} onClick={() => setSeasonPage(sPage - 1)} aria-label="Anterior">‹</button>
+              <span className={styles.pagerInfo}>Safras {sPage * SEASONS_PER_PAGE + 1}–{Math.min((sPage + 1) * SEASONS_PER_PAGE, seasons.length)} de {seasons.length}</span>
+              <button type="button" className={styles.pagerBtn} disabled={sPage >= totalSeasonPages - 1} onClick={() => setSeasonPage(sPage + 1)} aria-label="Próximo">›</button>
+            </div>
+          )}
         </section>
       </div>
     </div>
