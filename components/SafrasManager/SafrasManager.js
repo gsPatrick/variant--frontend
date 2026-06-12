@@ -15,6 +15,9 @@ const EVENT_TYPES = [
   { value: 'aplicacao_defensivos', label: 'Aplicação de defensivos' },
   { value: 'irrigacao', label: 'Irrigação' },
   { value: 'colheita', label: 'Colheita' },
+  { value: 'visita', label: 'Visita' },
+  { value: 'correcao', label: 'Correção' },
+  { value: 'manejo', label: 'Manejo' },
   { value: 'outro', label: 'Outro' },
 ];
 

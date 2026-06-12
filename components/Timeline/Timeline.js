@@ -13,6 +13,9 @@ const TYPE_VARIANT = {
   aplicacao_defensivos: 'defensivo',
   irrigacao: 'adubacao',
   colheita: 'colheita',
+  visita: 'defensivo',
+  correcao: 'adubacao',
+  manejo: 'colheita',
 };
 
 const ICONS = {
@@ -51,6 +54,23 @@ const ICONS = {
     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M4 20c4 0 6-3 6-8M20 20c-4 0-6-3-6-8" />
       <path d="M10 12c0-5 1-8 2-9 1 1 2 4 2 9" />
+    </svg>
+  ),
+  visita: (
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  ),
+  correcao: (
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 3h6M10 3v5L5.5 17a2 2 0 0 0 1.8 3h9.4a2 2 0 0 0 1.8-3L14 8V3" />
+      <path d="M7.5 14h9" />
+    </svg>
+  ),
+  manejo: (
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.3 2.3-2-2 2.3-2.3z" />
     </svg>
   ),
   default: (
