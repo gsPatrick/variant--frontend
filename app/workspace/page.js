@@ -26,13 +26,34 @@ const SafrasMap = dynamic(() => import('@/components/SafrasMap/SafrasMap'), {
 const cx = (...c) => c.filter(Boolean).join(' ');
 
 const BAR_NUTRIENTS = [
-  { value: 'calcio', label: 'Cálcio', unit: 'cmolc/dm³' },
-  { value: 'magnesio', label: 'Magnésio', unit: 'cmolc/dm³' },
-  { value: 'potassio', label: 'Potássio', unit: 'mg/dm³' },
-  { value: 'fosforo', label: 'Fósforo', unit: 'mg/dm³' },
-  { value: 'enxofre', label: 'Enxofre', unit: 'mg/dm³' },
-  { value: 'materia_organica', label: 'Matéria Orgânica', unit: 'g/dm³' },
-  { value: 'saturacao', label: 'Saturação (V%)', unit: '%' },
+  // Macronutrientes
+  { value: 'fosforo', label: 'Fósforo (P)', unit: 'mg/dm³' },
+  { value: 'potassio', label: 'Potássio (K)', unit: 'mg/dm³' },
+  { value: 'calcio', label: 'Cálcio (Ca)', unit: 'cmolc/dm³' },
+  { value: 'magnesio', label: 'Magnésio (Mg)', unit: 'cmolc/dm³' },
+  { value: 'enxofre', label: 'Enxofre (S)', unit: 'mg/dm³' },
+  // Micronutrientes
+  { value: 'zinco', label: 'Zinco (Zn)', unit: 'mg/dm³' },
+  { value: 'manganes', label: 'Manganês (Mn)', unit: 'mg/dm³' },
+  { value: 'ferro', label: 'Ferro (Fe)', unit: 'mg/dm³' },
+  { value: 'cobre', label: 'Cobre (Cu)', unit: 'mg/dm³' },
+  { value: 'boro', label: 'Boro (B)', unit: 'mg/dm³' },
+  // Índices / acidez / CTC
+  { value: 'ph', label: 'pH (água)', unit: '' },
+  { value: 'ph_cacl2', label: 'pH (CaCl₂)', unit: '' },
+  { value: 'saturacao', label: 'Saturação de Bases (V%)', unit: '%' },
+  { value: 'saturacao_aluminio', label: 'Saturação por Al (m%)', unit: '%' },
+  { value: 'ctc', label: 'CTC efetiva (t)', unit: 'cmolc/dm³' },
+  { value: 'ctc_total', label: 'CTC a pH 7 (T)', unit: 'cmolc/dm³' },
+  { value: 'acidez_potencial', label: 'Acidez Potencial (H+Al)', unit: 'cmolc/dm³' },
+  { value: 'aluminio', label: 'Alumínio (Al)', unit: 'cmolc/dm³' },
+  // Matéria orgânica / carbono
+  { value: 'materia_organica', label: 'Matéria Orgânica (M.O)', unit: '%' },
+  { value: 'cot', label: 'Carbono Orgânico (COT)', unit: '%' },
+  // Textura
+  { value: 'argila', label: 'Argila', unit: '%' },
+  { value: 'areia', label: 'Areia', unit: '%' },
+  { value: 'silte', label: 'Silte', unit: '%' },
 ];
 const RADAR_IDEAL = { P: 18, Zn: 2.2, Mn: 22, Fe: 50, Cu: 1.8, B: 0.6, Mg: 2, Ca: 6, S: 12, K: 120, V: 70, pH: 5.5 };
 
