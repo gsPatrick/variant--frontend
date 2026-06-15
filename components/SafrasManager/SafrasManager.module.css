@@ -511,3 +511,9 @@
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
+
+/* Lista de eventos com rolagem interna (mantém o form/Salvar sempre visível) */
+.eventsList {
+  max-height: 22rem;
+  overflow-y: auto;
+}

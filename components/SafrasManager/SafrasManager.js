@@ -239,6 +239,7 @@ function SeasonCard({ season, plotLabel, onChanged, onToast }) {
         {loading && <p className={styles.noEvents}>Carregando eventos…</p>}
         {!loading && events.length === 0 && <p className={styles.noEvents}>Nenhum evento cadastrado ainda.</p>}
 
+        <div className={styles.eventsList}>
         {!loading && pagedEvents.map((e) => (
           editingEventId === e.id ? (
             <div key={e.id} className={styles.addForm}>
@@ -296,6 +297,7 @@ function SeasonCard({ season, plotLabel, onChanged, onToast }) {
             </div>
           )
         ))}
+        </div>
 
         {!loading && totalEventPages > 1 && (
           <div className={styles.pager}>

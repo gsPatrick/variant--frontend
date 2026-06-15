@@ -97,6 +97,8 @@ export default function WorkspacePage() {
 
   // SAFRAS
   const [mapData, setMapData] = useState(null);
+  const [safraSeasons, setSafraSeasons] = useState([]);
+  const [safraSeasonId, setSafraSeasonId] = useState('');
   const [safraEvents, setSafraEvents] = useState([]);
   const [selectedEventId, setSelectedEventId] = useState(null);
   const [timelineOpen, setTimelineOpen] = useState(true);
@@ -260,12 +262,12 @@ export default function WorkspacePage() {
     return () => { cancel = true; };
   }, [plot]);
 
-  // ----- SAFRAS: mapa + timeline -----
+  // ----- SAFRAS: mapa + lista de safras (ano agrícola) do talhão -----
   useEffect(() => {
-    setSelectedEventId(null);
     if (!isSafras || !plot) {
       setMapData(null);
-      setSafraEvents([]);
+      setSafraSeasons([]);
+      setSafraSeasonId('');
       return undefined;
     }
     let cancel = false;
@@ -278,18 +280,38 @@ export default function WorkspacePage() {
       }
       try {
         const seasons = await seasonsApi.list(plot);
-        if (seasons && seasons.length) {
-          const events = await seasonsApi.events(seasons[0].id);
-          if (!cancel) setSafraEvents((events || []).map(adaptEvent));
-        } else if (!cancel) {
-          setSafraEvents([]);
+        if (!cancel) {
+          setSafraSeasons(seasons || []);
+          setSafraSeasonId((seasons && seasons[0] && seasons[0].id) || '');
         }
+      } catch {
+        if (!cancel) {
+          setSafraSeasons([]);
+          setSafraSeasonId('');
+        }
+      }
+    })();
+    return () => { cancel = true; };
+  }, [isSafras, plot]);
+
+  // ----- SAFRAS: eventos da safra (ano agrícola) selecionada -----
+  useEffect(() => {
+    setSelectedEventId(null);
+    if (!safraSeasonId) {
+      setSafraEvents([]);
+      return undefined;
+    }
+    let cancel = false;
+    (async () => {
+      try {
+        const events = await seasonsApi.events(safraSeasonId);
+        if (!cancel) setSafraEvents((events || []).map(adaptEvent));
       } catch {
         if (!cancel) setSafraEvents([]);
       }
     })();
     return () => { cancel = true; };
-  }, [isSafras, plot]);
+  }, [safraSeasonId]);
 
   // ----- Derivados -----
   const nutrientMeta = BAR_NUTRIENTS.find((n) => n.value === nutrient) || BAR_NUTRIENTS[0];
@@ -315,7 +337,10 @@ export default function WorkspacePage() {
   }));
 
   const selectedEvent = safraEvents.find((e) => e.id === selectedEventId) || null;
-  const safraCrop = mapData?.safraAtiva?.crop || '';
+  // Safra (ano agrícola) selecionada — dirige cultura/variedade/cor no mapa.
+  const selectedSeason = safraSeasons.find((s) => s.id === safraSeasonId) || null;
+  const seasonOptions = safraSeasons.map((s) => ({ value: s.id, label: s.seasonLabel || String(s.year) }));
+  const safraCrop = selectedSeason?.crop || mapData?.safraAtiva?.crop || '';
   const isSoja = safraCrop.toLowerCase().includes('soja');
   const safraColor = isSoja ? '#22c55e' : '#f97316';
   const cropLabel = safraCrop ? safraCrop.charAt(0).toUpperCase() + safraCrop.slice(1) : '';
@@ -325,7 +350,7 @@ export default function WorkspacePage() {
     name: mapData?.talhao?.name,
     areaHa: mapData?.talhao?.areaHa,
     cropLabel,
-    variety: mapData?.safraAtiva?.variety,
+    variety: selectedSeason?.variety || mapData?.safraAtiva?.variety,
     resistancePeak,
   };
 
@@ -345,9 +370,9 @@ export default function WorkspacePage() {
           plots={plotOptions}
           plot={plot}
           onPlotChange={setPlot}
-          safraYears={[]}
-          safraYear=""
-          onSafraYearChange={() => {}}
+          safraYears={seasonOptions}
+          safraYear={safraSeasonId}
+          onSafraYearChange={setSafraSeasonId}
         />
       </div>
 
@@ -356,7 +381,10 @@ export default function WorkspacePage() {
           talhaoOptions={plotOptions}
           talhao={plot}
           onTalhaoChange={setPlot}
-          showSafra={false}
+          safraOptions={seasonOptions}
+          safra={safraSeasonId}
+          onSafraChange={setSafraSeasonId}
+          showSafra={seasonOptions.length > 0}
         />
       )}
 
@@ -492,7 +520,7 @@ export default function WorkspacePage() {
                 geojson={mapData.talhao.geometry}
                 center={[Number(mapData.talhao.centroid.lat), Number(mapData.talhao.centroid.lng)]}
                 color={safraColor}
-                marker={mapData.safraAtiva ? { cropLabel, variety: mapData.safraAtiva.variety } : null}
+                marker={safraCrop ? { cropLabel, variety: selectedSeason?.variety || mapData.safraAtiva?.variety } : null}
                 info={mapInfo}
               />
             ) : (

@@ -133,12 +133,12 @@ export default function Sidebar({
 
           {module === 'safras' && safraYears.length > 0 && (
             <div className={styles.section}>
-              <label className={styles.label}>Safra (ano)</label>
+              <label className={styles.label}>Ano Agrícola</label>
               <Select
                 options={safraYears}
                 value={safraYear}
                 onChange={onSafraYearChange}
-                placeholder="Selecione a safra"
+                placeholder="Selecione o ano agrícola"
               />
             </div>
           )}
