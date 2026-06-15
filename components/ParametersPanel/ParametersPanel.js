@@ -32,6 +32,10 @@ export default function ParametersPanel({ onToast }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
+  // Links das redes sociais exibidos na sidebar.
+  const [social, setSocial] = useState({ instagram: '', whatsapp: '' });
+  const [savingSocial, setSavingSocial] = useState(false);
+
   useEffect(() => {
     (async () => {
       try {
@@ -43,6 +47,10 @@ export default function ParametersPanel({ onToast }) {
         setLoading(false);
       }
     })();
+    settingsApi
+      .getSocialLinks()
+      .then((d) => setSocial({ instagram: d?.links?.instagram || '', whatsapp: d?.links?.whatsapp || '' }))
+      .catch(() => {});
   }, []);
 
   function setVal(key, value) {
@@ -61,6 +69,19 @@ export default function ParametersPanel({ onToast }) {
       onToast(err.message || 'Não foi possível salvar.');
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function saveSocial() {
+    setSavingSocial(true);
+    try {
+      const data = await settingsApi.saveSocialLinks(social);
+      setSocial({ instagram: data?.links?.instagram || '', whatsapp: data?.links?.whatsapp || '' });
+      onToast('Links das redes sociais salvos! A sidebar já usa os novos endereços.');
+    } catch (err) {
+      onToast(err.message || 'Não foi possível salvar os links.');
+    } finally {
+      setSavingSocial(false);
     }
   }
 
@@ -119,6 +140,49 @@ export default function ParametersPanel({ onToast }) {
         Dica: esses valores são a referência de “teor ideal”. Se a sua recomendação muda por cultura ou tipo de solo,
         me avise que evoluímos para permitir conjuntos diferentes por cultura.
       </p>
+
+      <section className={styles.socialSection}>
+        <header className={styles.socialHead}>
+          <div>
+            <p className={styles.kicker}>Sidebar</p>
+            <h2 className={styles.subTitle}>Redes sociais (rodapé do menu)</h2>
+          </div>
+          <Button variant="primary" loading={savingSocial} onClick={saveSocial}>
+            Salvar links
+          </Button>
+        </header>
+        <p className={styles.socialHint}>
+          Cole o endereço completo de cada rede. Deixe em branco para esconder o ícone. Os links abrem em nova aba.
+        </p>
+        <div className={styles.socialGrid}>
+          <div className={styles.card}>
+            <label className={styles.cardLabel} htmlFor="social-instagram">Instagram</label>
+            <input
+              id="social-instagram"
+              className={styles.input}
+              type="url"
+              inputMode="url"
+              placeholder="https://instagram.com/suaconta"
+              value={social.instagram}
+              onChange={(e) => setSocial((s) => ({ ...s, instagram: e.target.value }))}
+            />
+            <p className={styles.cardHint}>perfil do Instagram</p>
+          </div>
+          <div className={styles.card}>
+            <label className={styles.cardLabel} htmlFor="social-whatsapp">WhatsApp</label>
+            <input
+              id="social-whatsapp"
+              className={styles.input}
+              type="url"
+              inputMode="url"
+              placeholder="https://wa.me/55669XXXXXXXX"
+              value={social.whatsapp}
+              onChange={(e) => setSocial((s) => ({ ...s, whatsapp: e.target.value }))}
+            />
+            <p className={styles.cardHint}>link do WhatsApp (wa.me)</p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

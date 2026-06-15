@@ -233,3 +233,34 @@
   color: var(--text-2);
 }
 .confirmCancel:hover { color: #fff; background: rgba(255,255,255,0.06); }
+
+/* ----- Filtros das listagens ----- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0 1.2rem 0.9rem;
+}
+.filter {
+  min-width: 9.5rem;
+  flex: 1 1 9.5rem;
+  max-width: 16rem;
+}
+.clearFilters {
+  flex-shrink: 0;
+  padding: 0.45rem 0.8rem;
+  border-radius: 9px;
+  border: 1px solid var(--glass-border);
+  background: transparent;
+  color: var(--text-2);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.clearFilters:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--glass-border-strong);
+}

@@ -3,10 +3,19 @@
 import { useCallback, useEffect, useState } from 'react';
 import styles from './DataDrivePanel.module.css';
 import Button from '../Button/Button';
+import Select from '../Select/Select';
 import EmptyState from '../EmptyState/EmptyState';
 import { plotsApi } from '@/lib/api';
 
 const cx = (...c) => c.filter(Boolean).join(' ');
+
+// Valores únicos (não nulos/vazios), preservando a ordem de aparição.
+const uniq = (arr) => [...new Set(arr.filter((x) => x != null && x !== ''))];
+// Monta opções de filtro com um "Todos…" no topo (value vazio).
+const optsAll = (allLabel, vals) => [
+  { value: '', label: allLabel },
+  ...uniq(vals).map((vv) => ({ value: String(vv), label: String(vv) })),
+];
 
 const Sheet = (
   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -69,6 +78,13 @@ export default function DataDrivePanel({ plots = [], onOpenImport, onImportKml, 
   const [loadingAnalyses, setLoadingAnalyses] = useState(true);
   const [confirmId, setConfirmId] = useState(null);
 
+  // Filtros das listagens
+  const [aPlot, setAPlot] = useState('');
+  const [aYear, setAYear] = useState('');
+  const [aDepth, setADepth] = useState('');
+  const [cPlot, setCPlot] = useState('');
+  const [cOrigin, setCOrigin] = useState('');
+
   const plotsKey = plots.map((p) => p.id).join(',');
 
   const loadAnalyses = useCallback(async () => {
@@ -119,6 +135,28 @@ export default function DataDrivePanel({ plots = [], onOpenImport, onImportKml, 
     geometry: p.geometry,
   }));
 
+  // Opções e linhas filtradas — Análises Químicas
+  const aPlotOpts = optsAll('Todos os talhões', analysisRows.map((r) => r.plot));
+  const aYearOpts = optsAll('Todos os anos', analysisRows.map((r) => r.year));
+  const aDepthOpts = optsAll('Todas as profundidades', analysisRows.map((r) => r.depth));
+  const filteredAnalyses = analysisRows.filter(
+    (r) =>
+      (!aPlot || r.plot === aPlot) &&
+      (!aYear || String(r.year) === aYear) &&
+      (!aDepth || (r.depth || '') === aDepth)
+  );
+
+  // Opções e linhas filtradas — Contornos Geográficos
+  const cPlotOpts = optsAll('Todos os talhões', contourRows.map((r) => r.plot));
+  const cOriginOpts = [
+    { value: '', label: 'Todas as origens' },
+    { value: 'kml', label: 'KML' },
+    { value: 'draw', label: 'Desenho' },
+  ];
+  const filteredContours = contourRows.filter(
+    (r) => (!cPlot || r.plot === cPlot) && (!cOrigin || (cOrigin === 'kml' ? r.isKml : !r.isKml))
+  );
+
   function downloadKml(row) {
     if (!outerRings(row.geometry).length) {
       onToast('Este talhão não tem contorno disponível para exportar.');
@@ -156,6 +194,16 @@ export default function DataDrivePanel({ plots = [], onOpenImport, onImportKml, 
             </div>
             <Button variant="secondary" className={styles.headBtn} onClick={onOpenImport}>+ Importar análises</Button>
           </div>
+          {!loadingAnalyses && analysisRows.length > 0 && (
+            <div className={styles.filters}>
+              <Select className={styles.filter} compact searchable options={aPlotOpts} value={aPlot} onChange={setAPlot} />
+              <Select className={styles.filter} compact options={aYearOpts} value={aYear} onChange={setAYear} />
+              <Select className={styles.filter} compact options={aDepthOpts} value={aDepth} onChange={setADepth} />
+              {(aPlot || aYear || aDepth) && (
+                <button type="button" className={styles.clearFilters} onClick={() => { setAPlot(''); setAYear(''); setADepth(''); }}>Limpar</button>
+              )}
+            </div>
+          )}
           <div className={styles.tableWrap}>
             {loadingAnalyses ? (
               <p className={styles.empty}>Carregando…</p>
@@ -167,13 +215,15 @@ export default function DataDrivePanel({ plots = [], onOpenImport, onImportKml, 
                 description="Importe uma planilha para ver as análises por talhão, ano e profundidade."
                 action={<Button variant="secondary" onClick={onOpenImport}>Importar análises</Button>}
               />
+            ) : filteredAnalyses.length === 0 ? (
+              <p className={styles.empty}>Nenhuma análise para esse filtro.</p>
             ) : (
               <table className={styles.table}>
                 <thead>
                   <tr><th>Talhão</th><th>Ano</th><th>Profundidade</th><th className={styles.right}>Ação</th></tr>
                 </thead>
                 <tbody>
-                  {analysisRows.map((r) => (
+                  {filteredAnalyses.map((r) => (
                     <tr key={r.id}>
                       <td className={styles.file}>{r.plot}</td>
                       <td className={styles.muted}>{r.year}</td>
@@ -207,6 +257,15 @@ export default function DataDrivePanel({ plots = [], onOpenImport, onImportKml, 
             </div>
             <Button variant="secondary" className={styles.headBtn} onClick={onImportKml}>+ Importar KML</Button>
           </div>
+          {contourRows.length > 0 && (
+            <div className={styles.filters}>
+              <Select className={styles.filter} compact searchable options={cPlotOpts} value={cPlot} onChange={setCPlot} />
+              <Select className={styles.filter} compact options={cOriginOpts} value={cOrigin} onChange={setCOrigin} />
+              {(cPlot || cOrigin) && (
+                <button type="button" className={styles.clearFilters} onClick={() => { setCPlot(''); setCOrigin(''); }}>Limpar</button>
+              )}
+            </div>
+          )}
           <div className={styles.tableWrap}>
             {contourRows.length === 0 ? (
               <EmptyState
@@ -216,13 +275,15 @@ export default function DataDrivePanel({ plots = [], onOpenImport, onImportKml, 
                 description="Suba um arquivo KML ou desenhe o contorno no Mapa de Gestão."
                 action={<Button variant="secondary" onClick={onImportKml}>Importar KML</Button>}
               />
+            ) : filteredContours.length === 0 ? (
+              <p className={styles.empty}>Nenhum contorno para esse filtro.</p>
             ) : (
               <table className={styles.table}>
                 <thead>
                   <tr><th>Talhão</th><th>Origem</th><th>Área</th><th className={styles.right}>Ações</th></tr>
                 </thead>
                 <tbody>
-                  {contourRows.map((r) => (
+                  {filteredContours.map((r) => (
                     <tr key={r.id}>
                       <td className={styles.file}>{r.plot}</td>
                       <td>

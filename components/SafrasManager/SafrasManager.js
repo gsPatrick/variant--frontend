@@ -22,6 +22,7 @@ const EVENT_TYPES = [
 ];
 
 const cx = (...c) => c.filter(Boolean).join(' ');
+const uniq = (arr) => [...new Set(arr.filter((x) => x != null && x !== ''))];
 const isSoja = (c) => String(c || '').toLowerCase().includes('soja');
 const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
 
@@ -333,6 +334,11 @@ export default function SafrasManager({ plotOptions = [], cropOptions, yearOptio
   const [submitting, setSubmitting] = useState(false);
   const [seasonPage, setSeasonPage] = useState(0);
 
+  // Filtros da listagem
+  const [fPlot, setFPlot] = useState('');
+  const [fYear, setFYear] = useState('');
+  const [fCrop, setFCrop] = useState('');
+
   const labelOfPlot = (id) => plotOptions.find((p) => p.value === id)?.label || 'Talhão';
 
   const load = useCallback(async () => {
@@ -385,11 +391,34 @@ export default function SafrasManager({ plotOptions = [], cropOptions, yearOptio
 
   const noPlots = plotOptions.length === 0;
 
-  // Paginação das safras
+  // Opções de filtro derivadas das safras existentes
+  const yearOf = (s) => s.seasonLabel || String(s.year);
+  const fPlotOpts = [
+    { value: '', label: 'Todos os talhões' },
+    ...uniq(seasons.map((s) => s.plotId)).map((id) => ({ value: id, label: labelOfPlot(id) })),
+  ];
+  const fYearOpts = [
+    { value: '', label: 'Todos os anos' },
+    ...uniq(seasons.map(yearOf)).map((y) => ({ value: String(y), label: String(y) })),
+  ];
+  const fCropOpts = [
+    { value: '', label: 'Todas as culturas' },
+    ...uniq(seasons.map((s) => s.crop)).map((c) => ({ value: c, label: cap(c) })),
+  ];
+
+  const filteredSeasons = seasons.filter(
+    (s) =>
+      (!fPlot || s.plotId === fPlot) &&
+      (!fYear || yearOf(s) === fYear) &&
+      (!fCrop || s.crop === fCrop)
+  );
+  const hasFilter = Boolean(fPlot || fYear || fCrop);
+
+  // Paginação das safras (sobre o resultado filtrado)
   const SEASONS_PER_PAGE = 5;
-  const totalSeasonPages = Math.max(1, Math.ceil(seasons.length / SEASONS_PER_PAGE));
+  const totalSeasonPages = Math.max(1, Math.ceil(filteredSeasons.length / SEASONS_PER_PAGE));
   const sPage = Math.min(seasonPage, totalSeasonPages - 1);
-  const pagedSeasons = seasons.slice(sPage * SEASONS_PER_PAGE, (sPage + 1) * SEASONS_PER_PAGE);
+  const pagedSeasons = filteredSeasons.slice(sPage * SEASONS_PER_PAGE, (sPage + 1) * SEASONS_PER_PAGE);
 
   return (
     <div className={styles.panel}>
@@ -431,6 +460,17 @@ export default function SafrasManager({ plotOptions = [], cropOptions, yearOptio
         </section>
 
         <section className={styles.listCol}>
+          {!loading && seasons.length > 0 && (
+            <div className={styles.filters}>
+              <Select className={styles.filter} compact searchable options={fPlotOpts} value={fPlot} onChange={(v) => { setFPlot(v); setSeasonPage(0); }} />
+              <Select className={styles.filter} compact options={fYearOpts} value={fYear} onChange={(v) => { setFYear(v); setSeasonPage(0); }} />
+              <Select className={styles.filter} compact options={fCropOpts} value={fCrop} onChange={(v) => { setFCrop(v); setSeasonPage(0); }} />
+              {hasFilter && (
+                <button type="button" className={styles.clearFilters} onClick={() => { setFPlot(''); setFYear(''); setFCrop(''); setSeasonPage(0); }}>Limpar</button>
+              )}
+            </div>
+          )}
+
           <div className={styles.seasons}>
             {loading && <p className={styles.noEvents}>Carregando safras…</p>}
 
@@ -440,6 +480,10 @@ export default function SafrasManager({ plotOptions = [], cropOptions, yearOptio
                 title="Nenhuma safra cadastrada"
                 description="Crie a primeira temporada no formulário ao lado e adicione os eventos da linha do tempo."
               />
+            )}
+
+            {!loading && seasons.length > 0 && filteredSeasons.length === 0 && (
+              <p className={styles.noEvents}>Nenhuma safra para esse filtro.</p>
             )}
 
             {!loading && pagedSeasons.map((s) => (
@@ -456,7 +500,7 @@ export default function SafrasManager({ plotOptions = [], cropOptions, yearOptio
           {!loading && totalSeasonPages > 1 && (
             <div className={cx(styles.pager, styles.pagerBar)}>
               <button type="button" className={styles.pagerBtn} disabled={sPage === 0} onClick={() => setSeasonPage(sPage - 1)} aria-label="Anterior">‹</button>
-              <span className={styles.pagerInfo}>Safras {sPage * SEASONS_PER_PAGE + 1}–{Math.min((sPage + 1) * SEASONS_PER_PAGE, seasons.length)} de {seasons.length}</span>
+              <span className={styles.pagerInfo}>Safras {sPage * SEASONS_PER_PAGE + 1}–{Math.min((sPage + 1) * SEASONS_PER_PAGE, filteredSeasons.length)} de {filteredSeasons.length}</span>
               <button type="button" className={styles.pagerBtn} disabled={sPage >= totalSeasonPages - 1} onClick={() => setSeasonPage(sPage + 1)} aria-label="Próximo">›</button>
             </div>
           )}

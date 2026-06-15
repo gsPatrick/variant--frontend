@@ -1,11 +1,12 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './Sidebar.module.css';
 import Logo from '../Logo/Logo';
 import Select from '../Select/Select';
 import ModuleToggle from '../ModuleToggle/ModuleToggle';
-import { auth } from '@/lib/api';
+import { auth, settingsApi } from '@/lib/api';
 
 const LogoutIcon = (
   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -75,6 +76,18 @@ export default function Sidebar({
   const router = useRouter();
   // Produtor (lockExpanded) nunca recolhe: sidebar sempre expandida e sem botão.
   const collapsed = lockExpanded ? false : collapsedProp;
+
+  // Links das redes sociais (configurados pelo admin na tela de Parâmetros).
+  const [social, setSocial] = useState({ instagram: '', whatsapp: '' });
+  useEffect(() => {
+    let alive = true;
+    settingsApi
+      .getSocialLinks()
+      .then((d) => { if (alive) setSocial(d?.links || {}); })
+      .catch(() => {});
+    return () => { alive = false; };
+  }, []);
+
   async function handleLogout() {
     await auth.logout();
     router.replace('/login');
@@ -163,29 +176,35 @@ export default function Sidebar({
         {!collapsed && <span>Sair</span>}
       </button>
 
-      <footer className={cx(styles.social, collapsed && styles.socialRail)}>
-        {!collapsed && <span className={styles.socialLabel}>Siga a Variant</span>}
-        <div className={styles.socialRow}>
-          <a
-            className={styles.socialBtn}
-            href="https://instagram.com/variantmapas"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Instagram da Variant"
-          >
-            {Instagram}
-          </a>
-          <a
-            className={styles.socialBtn}
-            href="https://wa.me/5566999999999"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="WhatsApp da Variant"
-          >
-            {WhatsApp}
-          </a>
-        </div>
-      </footer>
+      {(social.instagram || social.whatsapp) && (
+        <footer className={cx(styles.social, collapsed && styles.socialRail)}>
+          {!collapsed && <span className={styles.socialLabel}>Siga a Variant</span>}
+          <div className={styles.socialRow}>
+            {social.instagram && (
+              <a
+                className={styles.socialBtn}
+                href={social.instagram}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Instagram da Variant"
+              >
+                {Instagram}
+              </a>
+            )}
+            {social.whatsapp && (
+              <a
+                className={styles.socialBtn}
+                href={social.whatsapp}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="WhatsApp da Variant"
+              >
+                {WhatsApp}
+              </a>
+            )}
+          </div>
+        </footer>
+      )}
     </aside>
   );
 }
