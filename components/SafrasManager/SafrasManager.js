@@ -211,6 +211,7 @@ function SeasonCard({ season, plotLabel, onChanged, onToast }) {
                 {cap(season.crop)}
               </Badge>
               <span className={styles.variety}>{season.variety}</span>
+              <button type="button" className={styles.newEventBtn} onClick={() => { setAdding(true); setEventPage(0); }} title="Adicionar evento">+ Evento</button>
               <div className={styles.rowActions}>
                 <button type="button" className={styles.iconBtn} onClick={() => setEditingSeason(true)} title="Editar safra" aria-label="Editar safra">{Pencil}</button>
                 <button type="button" className={cx(styles.iconBtn, styles.danger)} onClick={() => setConfirmDelSeason(true)} title="Excluir safra" aria-label="Excluir safra">{Trash}</button>
@@ -234,6 +235,31 @@ function SeasonCard({ season, plotLabel, onChanged, onToast }) {
         {!loading && events.length > 0 && (
           <div className={styles.eventsHead}>
             <span className={styles.eventsCount}>{events.length} evento{events.length > 1 ? 's' : ''}</span>
+          </div>
+        )}
+
+        {adding && (
+          <div className={styles.addForm}>
+            <div className={styles.addRow}>
+              <Input placeholder="Título (ex.: Plantio)" value={form.title} onChange={(ev) => setForm((f) => ({ ...f, title: ev.target.value }))} />
+              <input type="date" className={styles.date} value={form.eventDate} onChange={(ev) => setForm((f) => ({ ...f, eventDate: ev.target.value }))} />
+            </div>
+            <Select options={EVENT_TYPES} value={form.eventType} onChange={(v) => setForm((f) => ({ ...f, eventType: v }))} />
+            <textarea
+              className={styles.desc}
+              rows={2}
+              placeholder="Descrição do que foi realizado..."
+              value={form.description}
+              onChange={(ev) => setForm((f) => ({ ...f, description: ev.target.value }))}
+            />
+            <label className={styles.fileRow}>
+              <span>{file ? file.name : 'Anexar foto (opcional)'}</span>
+              <input type="file" accept="image/*" className={styles.fileInput} onChange={(ev) => setFile(ev.target.files?.[0] || null)} />
+            </label>
+            <div className={styles.addActions}>
+              <Button variant="secondary" onClick={() => setAdding(false)} disabled={saving}>Cancelar</Button>
+              <Button variant="primary" onClick={submitEvent} loading={saving}>Salvar evento</Button>
+            </div>
           </div>
         )}
         {loading && <p className={styles.noEvents}>Carregando eventos…</p>}
@@ -307,32 +333,6 @@ function SeasonCard({ season, plotLabel, onChanged, onToast }) {
           </div>
         )}
 
-        {adding ? (
-          <div className={styles.addForm}>
-            <div className={styles.addRow}>
-              <Input placeholder="Título (ex.: Plantio)" value={form.title} onChange={(ev) => setForm((f) => ({ ...f, title: ev.target.value }))} />
-              <input type="date" className={styles.date} value={form.eventDate} onChange={(ev) => setForm((f) => ({ ...f, eventDate: ev.target.value }))} />
-            </div>
-            <Select options={EVENT_TYPES} value={form.eventType} onChange={(v) => setForm((f) => ({ ...f, eventType: v }))} />
-            <textarea
-              className={styles.desc}
-              rows={2}
-              placeholder="Descrição do que foi realizado..."
-              value={form.description}
-              onChange={(ev) => setForm((f) => ({ ...f, description: ev.target.value }))}
-            />
-            <label className={styles.fileRow}>
-              <span>{file ? file.name : 'Anexar foto (opcional)'}</span>
-              <input type="file" accept="image/*" className={styles.fileInput} onChange={(ev) => setFile(ev.target.files?.[0] || null)} />
-            </label>
-            <div className={styles.addActions}>
-              <Button variant="secondary" onClick={() => setAdding(false)} disabled={saving}>Cancelar</Button>
-              <Button variant="primary" onClick={submitEvent} loading={saving}>Salvar evento</Button>
-            </div>
-          </div>
-        ) : (
-          <button type="button" className={styles.addEvent} onClick={() => setAdding(true)}>+ Novo evento</button>
-        )}
       </div>
     </div>
   );
