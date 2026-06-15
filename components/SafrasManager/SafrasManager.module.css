@@ -127,13 +127,13 @@
 .events {
   display: flex;
   flex-direction: column;
-  padding: 0.4rem 0.6rem 0.9rem;
+  padding: 0.4rem 0.6rem 1.4rem;
 }
 .event {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-  padding: 1.15rem 1.4rem;
+  padding: 1.15rem 1.4rem 1.5rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 .eventTop {
