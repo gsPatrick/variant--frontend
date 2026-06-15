@@ -92,7 +92,7 @@ export default function LoginPage() {
         </div>
 
         <div className={styles.brandContent}>
-          <p className={styles.brandPhrase}>Do solo à safra, em alta definição.</p>
+          <p className={styles.brandPhrase}>Informação precisa, decisão segura.</p>
         </div>
       </aside>
 
