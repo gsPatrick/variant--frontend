@@ -57,8 +57,9 @@ const WhatsApp = (
 );
 
 export default function Sidebar({
-  collapsed,
+  collapsed: collapsedProp,
   onToggle,
+  lockExpanded = false,
   module,
   onModuleChange,
   farms,
@@ -72,6 +73,8 @@ export default function Sidebar({
   onSafraYearChange,
 }) {
   const router = useRouter();
+  // Produtor (lockExpanded) nunca recolhe: sidebar sempre expandida e sem botão.
+  const collapsed = lockExpanded ? false : collapsedProp;
   async function handleLogout() {
     await auth.logout();
     router.replace('/login');
@@ -86,14 +89,16 @@ export default function Sidebar({
             <Logo variant="lockup" size="" className={styles.brandLogo} />
           )}
         </div>
-        <button
-          type="button"
-          className={styles.collapseBtn}
-          onClick={onToggle}
-          aria-label={collapsed ? 'Expandir menu' : 'Recolher menu'}
-        >
-          {collapsed ? ChevronRight : ChevronLeft}
-        </button>
+        {!lockExpanded && (
+          <button
+            type="button"
+            className={styles.collapseBtn}
+            onClick={onToggle}
+            aria-label={collapsed ? 'Expandir menu' : 'Recolher menu'}
+          >
+            {collapsed ? ChevronRight : ChevronLeft}
+          </button>
+        )}
       </div>
 
       {collapsed ? (

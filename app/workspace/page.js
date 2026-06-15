@@ -74,7 +74,8 @@ function adaptEvent(e) {
 }
 
 export default function WorkspacePage() {
-  const [collapsed, setCollapsed] = useState(false);
+  // Produtor: sidebar sempre expandida, sem opção de recolher.
+  const collapsed = false;
   const [module, setModule] = useState('solos');
 
   const [farms, setFarms] = useState([]);
@@ -361,7 +362,7 @@ export default function WorkspacePage() {
       <div className={styles.sidebarSlot}>
         <Sidebar
           collapsed={collapsed}
-          onToggle={() => setCollapsed((p) => !p)}
+          lockExpanded
           module={module}
           onModuleChange={setModule}
           farms={farmOptions}
