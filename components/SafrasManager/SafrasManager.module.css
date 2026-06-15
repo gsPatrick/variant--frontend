@@ -24,6 +24,7 @@
   min-height: 0;
   display: grid;
   grid-template-columns: 320px 1fr;
+  grid-template-rows: minmax(0, 1fr);
   gap: 1.25rem;
 }
 
@@ -536,9 +537,9 @@
 
 /* Lista de eventos com rolagem interna (mostra todos; rola quando há muitos) */
 .eventsList {
-  max-height: 34rem;
+  max-height: 19rem;
   overflow-y: auto;
-  padding-right: 0.2rem;
+  padding-right: 0.35rem;
 }
 
 /* Botão "+ Evento" no header da safra */
