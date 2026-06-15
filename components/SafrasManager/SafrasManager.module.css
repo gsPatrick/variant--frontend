@@ -456,7 +456,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.7rem 1.2rem 0.2rem;
+  width: 100%;
+  padding: 0.7rem 1.2rem 0.5rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+.eventsHead:hover .eventsToggle {
+  color: var(--text-1);
 }
 .eventsCount {
   font-size: 0.72rem;
@@ -464,6 +471,21 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-3);
+}
+.eventsToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-2);
+  transition: color 0.2s var(--ease);
+}
+.toggleChevron {
+  transition: transform 0.25s var(--ease);
+}
+.toggleChevronOpen {
+  transform: rotate(180deg);
 }
 .pager {
   display: flex;
@@ -512,10 +534,11 @@
   white-space: nowrap;
 }
 
-/* Lista de eventos com rolagem interna (mantém o form/Salvar sempre visível) */
+/* Lista de eventos com rolagem interna (mostra todos; rola quando há muitos) */
 .eventsList {
-  max-height: 22rem;
+  max-height: 34rem;
   overflow-y: auto;
+  padding-right: 0.2rem;
 }
 
 /* Botão "+ Evento" no header da safra */

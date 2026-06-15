@@ -63,12 +63,8 @@ function SeasonCard({ season, plotLabel, onChanged, onToast }) {
   const [savingEvent, setSavingEvent] = useState(false);
   const [confirmDelEventId, setConfirmDelEventId] = useState(null);
 
-  // Paginação dos eventos
-  const [eventPage, setEventPage] = useState(0);
-  const EVENTS_PER_PAGE = 4;
-  const totalEventPages = Math.max(1, Math.ceil(events.length / EVENTS_PER_PAGE));
-  const page = Math.min(eventPage, totalEventPages - 1);
-  const pagedEvents = events.slice(page * EVENTS_PER_PAGE, (page + 1) * EVENTS_PER_PAGE);
+  // Mostrar/ocultar a lista de eventos (aberta por padrão).
+  const [eventsOpen, setEventsOpen] = useState(true);
 
   const load = useCallback(async () => {
     try {
@@ -211,7 +207,7 @@ function SeasonCard({ season, plotLabel, onChanged, onToast }) {
                 {cap(season.crop)}
               </Badge>
               <span className={styles.variety}>{season.variety}</span>
-              <button type="button" className={styles.newEventBtn} onClick={() => { setAdding(true); setEventPage(0); }} title="Adicionar evento">+ Evento</button>
+              <button type="button" className={styles.newEventBtn} onClick={() => { setAdding(true); setEventsOpen(true); }} title="Adicionar evento">+ Evento</button>
               <div className={styles.rowActions}>
                 <button type="button" className={styles.iconBtn} onClick={() => setEditingSeason(true)} title="Editar safra" aria-label="Editar safra">{Pencil}</button>
                 <button type="button" className={cx(styles.iconBtn, styles.danger)} onClick={() => setConfirmDelSeason(true)} title="Excluir safra" aria-label="Excluir safra">{Trash}</button>
@@ -233,9 +229,13 @@ function SeasonCard({ season, plotLabel, onChanged, onToast }) {
 
       <div className={styles.events}>
         {!loading && events.length > 0 && (
-          <div className={styles.eventsHead}>
+          <button type="button" className={styles.eventsHead} onClick={() => setEventsOpen((o) => !o)} aria-expanded={eventsOpen}>
             <span className={styles.eventsCount}>{events.length} evento{events.length > 1 ? 's' : ''}</span>
-          </div>
+            <span className={styles.eventsToggle}>
+              {eventsOpen ? 'Ocultar' : 'Mostrar'}
+              <svg className={cx(styles.toggleChevron, eventsOpen && styles.toggleChevronOpen)} viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
+            </span>
+          </button>
         )}
 
         {adding && (
@@ -265,8 +265,9 @@ function SeasonCard({ season, plotLabel, onChanged, onToast }) {
         {loading && <p className={styles.noEvents}>Carregando eventos…</p>}
         {!loading && events.length === 0 && <p className={styles.noEvents}>Nenhum evento cadastrado ainda.</p>}
 
+        {eventsOpen && (
         <div className={styles.eventsList}>
-        {!loading && pagedEvents.map((e) => (
+        {!loading && events.map((e) => (
           editingEventId === e.id ? (
             <div key={e.id} className={styles.addForm}>
               <div className={styles.addRow}>
@@ -324,13 +325,6 @@ function SeasonCard({ season, plotLabel, onChanged, onToast }) {
           )
         ))}
         </div>
-
-        {!loading && totalEventPages > 1 && (
-          <div className={styles.pager}>
-            <button type="button" className={styles.pagerBtn} disabled={page === 0} onClick={() => setEventPage(page - 1)} aria-label="Anterior">‹</button>
-            <span className={styles.pagerInfo}>{page + 1} / {totalEventPages}</span>
-            <button type="button" className={styles.pagerBtn} disabled={page >= totalEventPages - 1} onClick={() => setEventPage(page + 1)} aria-label="Próximo">›</button>
-          </div>
         )}
 
       </div>
